@@ -1,5 +1,6 @@
 package model.diary;
 
+import javax.persistence.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -16,11 +17,19 @@ import java.util.*;
  * @author Paweł
  *
  */
+@Entity
 public class Diary implements Serializable {
 	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue
+	private Long id;
+	@Column
 	private Date startDate;
+	@Column
 	private Date finishDate;
+	@OneToMany
 	private List<ExercisesDone> exercisesDone;
+	@Column
 	private Integer restTime;//seconds
 	/**
 	 * Metoda pobierająca wykonane treningi
