@@ -17,7 +17,7 @@ public class ExercisesDone implements Serializable {
 	private Long id;
 	@OneToOne
 	private Exercise exercise;
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<Set> sets;
 	/**
 	 * Konstruktor tworzacy pusty obiekt

@@ -128,12 +128,6 @@ public class FirstStartController implements Initializable {
 				stage.close();
 				CreateExercises start = new CreateExercises();
 				start.start();
-			} catch (IOException e) {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Błąd: " + e.toString());
-				alert.showAndWait();
 			} catch (ParseException e) {
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Informacja");

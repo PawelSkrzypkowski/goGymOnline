@@ -1,5 +1,8 @@
 package model.diary;
 
+import model.user.GlobalUser;
+import model.user.User;
+
 import javax.persistence.*;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,6 +13,7 @@ import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 /**
@@ -27,7 +31,7 @@ public class Diary implements Serializable {
 	private Date startDate;
 	@Column
 	private Date finishDate;
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<ExercisesDone> exercisesDone;
 	@Column
 	private Integer restTime;//seconds
@@ -38,15 +42,13 @@ public class Diary implements Serializable {
 	 * @throws IOException
 	 */
 	public static LinkedList<Diary> downloadDiaries() throws ClassNotFoundException, IOException {
-		LinkedList<Diary> diary = new LinkedList<Diary>();
-		File folder = new File("diary/");
-		File[] listOfDiaries = folder.listFiles();
-		for (File file : listOfDiaries) {
-			if (file.isFile()) {
-				diary.add(Diary.readDiary(file.getName()));
-			}
-		}
-		return diary;
+		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		User user = entityManager.find(User.class, GlobalUser.loggedUserId);
+		LinkedList<Diary> list = new LinkedList<>(user.getDiaryList());
+		entityManager.close();
+		entityManagerFactory.close();
+		return list;
 	}
 	/**
 	 * Metoda obliczająca podniesiony ciezar w ciagu wybranego miesiaca
@@ -260,18 +262,14 @@ public class Diary implements Serializable {
 	 * Metoda zapisujaca dziennik
 	 * @throws IOException
 	 */
-	public void saveDiary() throws IOException {
-		ObjectOutputStream file = null;
-		new File("diary/").mkdir();
-		try {
-			SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH-mm-ss");
-			file = new ObjectOutputStream(new FileOutputStream("diary/" + format.format(startDate)));
-			file.writeObject(this);
-			file.flush();
-		} finally {
-			if (file != null)
-				file.close();
-		}
+	public void saveDiary(){
+		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		entityManager.getTransaction().begin();
+		entityManager.merge(this);
+		entityManager.getTransaction().commit();
+		entityManager.close();
+		entityManagerFactory.close();
 	}
 	/**
 	 * Metoda odczytująca wybrany trening
@@ -282,16 +280,21 @@ public class Diary implements Serializable {
 	 * @throws ClassNotFoundException
 	 * @throws InvalidClassException
 	 */
-	public static Diary readDiary(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException, InvalidClassException {
-		ObjectInputStream file = null;
-		Diary diary = null;
-		new File("diary/").mkdir();
-		file = new ObjectInputStream(new FileInputStream("diary/" + fileName));
-		diary = (Diary) file.readObject();
-		if (file != null)
-			file.close();
-		return diary;
-
+	public static Diary readDiary(String fileName){
+		SimpleDateFormat sdf2 = new SimpleDateFormat("dd-MM-yyyy HH-mm-ss");
+		try {
+			Date date = sdf2.parse(fileName);
+			EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
+			EntityManager entityManager = entityManagerFactory.createEntityManager();
+			TypedQuery<Diary> query = entityManager.createQuery("SELECT d FROM Diary d WHERE d.startDate=:date", Diary.class);
+			query.setParameter("date", date);
+			Diary diary = query.getSingleResult();
+			entityManager.close();
+			entityManagerFactory.close();
+			return diary;
+		} catch (ParseException e) {
+			return null;
+		}
 	}
 	public Date getStartDate() {
 		return startDate;
