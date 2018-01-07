@@ -410,16 +410,8 @@ public class PlansController {
 		mainPage.getChildren().addAll(exerciseName, set, save, skipSet, skipExercise);
 		skipExercise.setOnAction((event) -> {
 			if (workout.getExercises().size() == exerciseNumber){// jesli koniec treningu
-				try {
-					diary.setFinishDate(new Date());
-					diary.saveDiary();
-				} catch (IOException e) {
-					Alert alert = new Alert(AlertType.INFORMATION);
-					alert.setTitle("Informacja");
-					alert.setHeaderText("");
-					alert.setContentText("Błąd podczas zapisywania treningu");
-					alert.showAndWait();
-				}
+				diary.setFinishDate(new Date());
+				diary.saveDiary();
 				SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH-mm-ss");
 				TrainingProgressController tpc = new TrainingProgressController();
 				tpc.showTrainingSummary(mainPage, format.format(diary.getStartDate()));
@@ -435,16 +427,8 @@ public class PlansController {
 			}
 			if (setNumber == workout.getSetsNumber().get(exerciseNumber - 1)) {// jesli ostatnia seria
 				if (workout.getExercises().size() == exerciseNumber){// jesli koniec treningu
-					try {
-						diary.setFinishDate(new Date());
-						diary.saveDiary();
-					} catch (IOException e) {
-						Alert alert = new Alert(AlertType.INFORMATION);
-						alert.setTitle("Informacja");
-						alert.setHeaderText("");
-						alert.setContentText("Błąd podczas zapisywania treningu");
-						alert.showAndWait();
-					}
+					diary.setFinishDate(new Date());
+					diary.saveDiary();
 					SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH-mm-ss");
 					TrainingProgressController tpc = new TrainingProgressController();
 					tpc.showTrainingSummary(mainPage, format.format(diary.getStartDate()));
@@ -468,16 +452,8 @@ public class PlansController {
 					diary.getExercisesDone().get(diary.getExercisesDone().size() - 1).getSets().add(new Set(r, w));
 				}
 				if(setNumber == workout.getSetsNumber().get(exerciseNumber - 1) && workout.getExercises().size() == exerciseNumber){//jesli koniec treningu
-					try {
-						diary.setFinishDate(new Date());
-						diary.saveDiary();
-					} catch (IOException e) {
-						Alert alert = new Alert(AlertType.INFORMATION);
-						alert.setTitle("Informacja");
-						alert.setHeaderText("");
-						alert.setContentText("Błąd podczas zapisywania treningu");
-						alert.showAndWait();
-					}
+					diary.setFinishDate(new Date());
+					diary.saveDiary();
 					SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH-mm-ss");
 					TrainingProgressController tpc = new TrainingProgressController();
 					tpc.showTrainingSummary(mainPage, format.format(diary.getStartDate()));

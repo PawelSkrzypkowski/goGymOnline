@@ -151,15 +151,7 @@ public class TrainingProgressController {
 	 */
 	public void showTrainingSummary(VBox mainPage, String fileName) {
 		Diary diary = null;
-		try {
-			diary = Diary.readDiary(fileName);
-		} catch (ClassNotFoundException | IOException e) {
-			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Informacja");
-			alert.setHeaderText("");
-			alert.setContentText("Nie odnaleziono pliku! Błąd: " + e.toString());
-			alert.showAndWait();
-		}
+		diary = Diary.readDiary(fileName);
 		mainPage.getChildren().clear();
 		SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 		Label summary = new Label("Podsumowanie treningu z dnia " + format.format(diary.getStartDate()));

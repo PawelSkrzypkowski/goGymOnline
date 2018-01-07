@@ -38,7 +38,7 @@ public class User implements Serializable {
 	private String lastName;
 	@Column
 	private Date birthDate;
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<Log> logs;
 	@OneToMany
 	private List<Workout> workouts;
@@ -108,16 +108,15 @@ public class User implements Serializable {
 	 * Metoda zapisujaca uzytkownika
 	 * @throws IOException
 	 */
-	public void saveUser() throws IOException {
-		ObjectOutputStream file = null;
-		try {
-			file = new ObjectOutputStream(new FileOutputStream("user"));
-			file.writeObject(this);
-			file.flush();
-		} finally {
-			if (file != null)
-				file.close();
-		}
+	public void saveUser(){
+		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		this.id=GlobalUser.loggedUserId;
+		entityManager.getTransaction().begin();
+		entityManager.merge(this);
+		entityManager.getTransaction().commit();
+		entityManager.close();
+		entityManagerFactory.close();
 	}
 	/**
 	 * Metoda odczytujaca uzytkownika
@@ -128,12 +127,12 @@ public class User implements Serializable {
 	 * @throws InvalidClassException
 	 */
 	public static User readUser() throws FileNotFoundException, IOException, ClassNotFoundException, InvalidClassException {
-		ObjectInputStream file = null;
-		User user = null;
-		file = new ObjectInputStream(new FileInputStream("user"));
-		user = (User) file.readObject();
-		if (file != null)
-			file.close();
+		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		User user = entityManager.find(User.class, GlobalUser.loggedUserId);
+		user.getLogs();
+		entityManager.close();
+		entityManagerFactory.close();
 		return user;
 	}
 	/**
@@ -227,6 +226,22 @@ public class User implements Serializable {
 
 	public void setLogs(List<Log> logs) {
 		this.logs = logs;
+	}
+
+	public List<Workout> getWorkouts() {
+		return workouts;
+	}
+
+	public void setWorkouts(List<Workout> workouts) {
+		this.workouts = workouts;
+	}
+
+	public List<Diary> getDiaryList() {
+		return diaryList;
+	}
+
+	public void setDiaryList(List<Diary> diaryList) {
+		this.diaryList = diaryList;
 	}
 
 	@Override

@@ -1,6 +1,8 @@
 package model.diary;
 
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,6 +31,7 @@ public class Exercise implements Serializable {
 	private String name;
 	// private Obrazek obrazek;
 	@Column
+	@Type(type = "text")
 	private String description;
 	@ElementCollection
 	@OrderColumn
@@ -59,17 +62,14 @@ public class Exercise implements Serializable {
 	 * Metoda zapisujaca cwiczenie
 	 * @throws IOException
 	 */
-	public void saveExercise() throws IOException {
-		new File("exercises/").mkdir();
-		ObjectOutputStream file = null;
-		try {
-			file = new ObjectOutputStream(new FileOutputStream("exercises/" + name));
-			file.writeObject(this);
-			file.flush();
-		} finally {
-			if (file != null)
-				file.close();
-		}
+	public void saveExercise(){
+		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		entityManager.getTransaction().begin();
+		entityManager.merge(this);
+		entityManager.getTransaction().commit();
+		entityManager.close();
+		entityManagerFactory.close();
 	}
 	/**
 	 * Metoda odczytująca cwiczenie
@@ -81,14 +81,13 @@ public class Exercise implements Serializable {
 	 * @throws InvalidClassException
 	 */
 	public static Exercise readExercise(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException, InvalidClassException {
-		new File("exercises/").mkdir();
-		ObjectInputStream file = null;
-		Exercise exercise = null;
-		file = new ObjectInputStream(new FileInputStream("exercises/" + fileName));
-		exercise = (Exercise) file.readObject();
-		if (file != null) {
-			file.close();
-		}
+		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		TypedQuery<Exercise> query = entityManager.createQuery("SELECT e FROM Exercise e WHERE e.name=:name", Exercise.class);
+		query.setParameter("name", fileName);
+		Exercise exercise = query.getSingleResult();
+		entityManager.close();
+		entityManagerFactory.close();
 		return exercise;
 	}
 	
@@ -138,14 +137,12 @@ public class Exercise implements Serializable {
 	 * @throws IOException
 	 */
 	public static List<Exercise> downloadExercises() throws FileNotFoundException, ClassNotFoundException, IOException {
-		List<Exercise> list = new LinkedList<Exercise>();
-		File folder = new File("exercises/");
-		File[] listOfExercises = folder.listFiles();
-		for (File file : listOfExercises) {
-			if (file.isFile()) {
-					list.add(Exercise.readExercise(file.getName()));
-			}
-		}
+		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		Query query = entityManager.createQuery("SELECT e from Exercise e");
+		List<Exercise> list = query.getResultList();
+		entityManager.close();
+		entityManagerFactory.close();
 		return list;
 	}
 
