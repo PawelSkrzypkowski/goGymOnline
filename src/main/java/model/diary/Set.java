@@ -1,5 +1,6 @@
 package model.diary;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,10 +9,18 @@ import java.util.List;
  * @author Paweł
  *
  */
+@Entity(name = "set_table")
 public class Set implements Serializable{
 	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue
+	private Long id;
+	@Column
 	private Integer reps;
+	@Column
 	private Boolean dropSet;
+	@ElementCollection
+	@OrderColumn
 	private List<Double> weight;
 
 
@@ -42,6 +51,7 @@ public class Set implements Serializable{
 			list.add(weight);
 		setWeight(list);
 	}
+	public Set(){}
 	@Override
 	public int hashCode() {
 		final int prime = 31;

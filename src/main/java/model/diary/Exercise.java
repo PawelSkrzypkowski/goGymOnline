@@ -1,6 +1,7 @@
 package model.diary;
 
 
+import javax.persistence.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -18,13 +19,23 @@ import java.util.List;
  * @author Paweł
  *
  */
+@Entity
 public class Exercise implements Serializable {
 	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue
+	private Long id;
+	@Column
 	private String name;
 	// private Obrazek obrazek;
+	@Column
 	private String description;
+	@ElementCollection
+	@OrderColumn
 	private String[] workingMuscles;
+	@Column
 	private int record;
+	@Column
 	private int recordReps;
 	/**
 	 * Konstruktor tworzacy cwiczenie

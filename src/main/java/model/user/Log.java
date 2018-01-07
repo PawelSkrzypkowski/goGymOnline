@@ -1,5 +1,9 @@
 package model.user;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Date;
 /**
@@ -7,17 +11,32 @@ import java.util.Date;
  * @author Paweł
  *
  */
+@Entity
 public class Log implements Serializable {
+	@Id
+	@GeneratedValue
+	private Long id;
+	@Column
 	private Date mensurationDate = new Date();
+	@Column
 	private float weight;
+	@Column
 	private float neck;
+	@Column
 	private float chest;
+	@Column
 	private float biceps;
+	@Column
 	private float waist;
+	@Column
 	private float stomach;
+	@Column
 	private float hips;
+	@Column
 	private float thigh;
+	@Column
 	private float calf;
+	@Column
 	private static final long serialVersionUID = 1L;
 	/**
 	 * Metoda obliczająca BMI

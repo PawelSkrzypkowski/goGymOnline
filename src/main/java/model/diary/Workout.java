@@ -2,6 +2,7 @@ package model.diary;
 
 import model.diary.Exercise;
 
+import javax.persistence.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -20,14 +21,27 @@ import java.util.List;
  * @author Paweł
  *
  */
+@Entity
 public class Workout implements Serializable {
 	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue
+	private Long id;
+	@Column
 	private String workoutName;
+	@OneToMany
 	private List<Exercise> exercises;
+	@ElementCollection
+	@OrderColumn
 	private List<Integer> setsNumber;
+	@ElementCollection
+	@OrderColumn
 	private List<Integer> rest;
+	@Column
 	private String workoutDescription;
+	@Column
 	private String workoutType;
+	@Column
 	private String difficultyLevel;
 
 	@Override

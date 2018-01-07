@@ -1,5 +1,9 @@
 package model.user;
 
+import model.diary.Diary;
+import model.diary.Workout;
+
+import javax.persistence.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -20,13 +24,26 @@ import java.util.TreeMap;
  * @author Paweł
  *
  */
+@Entity
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue
+	private Long id;
+	@Column
 	private Date startDate = new Date();
+	@Column
 	private String firstName;
+	@Column
 	private String lastName;
+	@Column
 	private Date birthDate;
+	@OneToMany
 	private List<Log> logs;
+	@OneToMany
+	private List<Workout> workouts;
+	@OneToMany
+	private List<Diary> diaryList;
 	
 	@Override
 	public int hashCode() {

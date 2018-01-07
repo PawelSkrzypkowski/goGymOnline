@@ -1,5 +1,6 @@
 package model.diary;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,9 +9,15 @@ import java.util.List;
  * @author Paweł
  *
  */
+@Entity
 public class ExercisesDone implements Serializable {
 	private static final long serialVersionUID = 1L;
+	@Id
+	@GeneratedValue
+	private Long id;
+	@OneToOne
 	private Exercise exercise;
+	@OneToMany
 	private List<Set> sets;
 	/**
 	 * Konstruktor tworzacy pusty obiekt
