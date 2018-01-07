@@ -40,9 +40,9 @@ public class User implements Serializable {
 	private Date birthDate;
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Log> logs;
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<Workout> workouts;
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<Diary> diaryList;
 	
 	@Override

@@ -265,8 +265,10 @@ public class Diary implements Serializable {
 	public void saveDiary(){
 		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		User user = entityManager.find(User.class, GlobalUser.loggedUserId);
 		entityManager.getTransaction().begin();
-		entityManager.merge(this);
+		user.getDiaryList().add(this);
+		entityManager.merge(user);
 		entityManager.getTransaction().commit();
 		entityManager.close();
 		entityManagerFactory.close();
@@ -286,9 +288,14 @@ public class Diary implements Serializable {
 			Date date = sdf2.parse(fileName);
 			EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
 			EntityManager entityManager = entityManagerFactory.createEntityManager();
-			TypedQuery<Diary> query = entityManager.createQuery("SELECT d FROM Diary d WHERE d.startDate=:date", Diary.class);
-			query.setParameter("date", date);
-			Diary diary = query.getSingleResult();
+			User user = entityManager.find(User.class, GlobalUser.loggedUserId);
+			Diary diary = null;
+			for(Diary d : user.getDiaryList()) {
+				if(d.getStartDate().equals(date)) {
+					diary = d;
+					break;
+				}
+			}
 			entityManager.close();
 			entityManagerFactory.close();
 			return diary;

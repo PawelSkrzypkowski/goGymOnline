@@ -35,6 +35,12 @@ import model.diary.Exercise;
 import model.diary.ExercisesDone;
 import model.diary.Set;
 import model.diary.Workout;
+import model.user.GlobalUser;
+import model.user.User;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 /**
  * Klasa - kontroler do obslugi planow treningowych
@@ -53,23 +59,12 @@ public class PlansController {
 	 * Metoda pobierajaca plany treningowe
 	 */
 	public void downloadPlans() {
-		File folder = new File("workouts/");
-		File[] listOfWorkouts = folder.listFiles();
-		for (File file : listOfWorkouts) {
-			if (file.isFile()) {
-				try {
-					workoutList.add(Workout.readWorkout(file.getName()));
-				} catch (ClassNotFoundException | IOException e) {
-					Alert alert = new Alert(AlertType.INFORMATION);
-					alert.setTitle("Informacja");
-					alert.setHeaderText("");
-					alert.setContentText("Uszkodzony lub brak pliku treningowego! Usuń lub przywróc plik "
-							+ file.getAbsolutePath() + " i uruchom aplikacje ponownie.");
-					alert.showAndWait();
-				}
-
-			}
-		}
+		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		User user = entityManager.find(User.class, GlobalUser.loggedUserId);
+		workoutList = user.getWorkouts();
+		entityManager.close();
+		entityManagerFactory.close();
 	}
 
 	public boolean checkIntegerCorrectness(String number) {
@@ -138,39 +133,15 @@ public class PlansController {
 			editWorkout(workout, mainPage);
 		});
 		delete.setOnAction((event) -> {
-			try {
-				workout.deleteItem(finalI);
-			} catch (IOException e) {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Błąd: " + e.toString());
-				alert.showAndWait();
-			}
+			workout.deleteItem(finalI);
 			editWorkout(workout, mainPage);
 		});
 		up.setOnAction((edit) -> {
-			try {
-				workout.moveUpExercise(finalI);
-			} catch (IOException e) {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Błąd: " + e.toString());
-				alert.showAndWait();
-			}
+			workout.moveUpExercise(finalI);
 			editWorkout(workout, mainPage);
 		});
 		down.setOnAction((edit) -> {
-			try {
-				workout.moveDownExercise(finalI);
-			} catch (IOException e) {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Błąd: " + e.toString());
-				alert.showAndWait();
-			}
+			workout.moveDownExercise(finalI);
 			editWorkout(workout, mainPage);
 		});
 	}
@@ -503,15 +474,7 @@ public class PlansController {
 			vb.setStyle("-fx-background-color: #bc5856; -fx-background-radius: 5 5 5 5; -fx-border-radius: 5 5 5 5;");
 		mainPage.getChildren().add(vb);
 		delete.setOnAction((event) -> {
-			try {
-				workout.deleteWorkout();
-			} catch (IOException e) {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Błąd usuwania pliku");
-				alert.showAndWait();
-			}
+			workout.deleteWorkout();
 			workoutList.clear();
 			createStage(mainPage);
 		});
