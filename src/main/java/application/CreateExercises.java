@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InvalidClassException;
 import java.util.LinkedList;
+import java.util.List;
 
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -15,6 +16,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.diary.Exercise;
 import model.diary.Workout;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 
 /**
  * Klasa używana przy pierwszym włączeniu apliakcji do utworzenia plików z ćwiczeniami i przykładowym treningiem.
@@ -41,9 +47,15 @@ public class CreateExercises {
 			root.getChildren().addAll(descr, descr2);
 			descr.setVisible(false);
 			descr2.setVisible(false);
-			if(loadExercises() == true){
-				descr.setVisible(true);
+			EntityManager entityManager = JPAHolder.getEntityManager();
+			TypedQuery<Exercise> query = entityManager.createQuery("select e from Exercise e", Exercise.class);
+			List<Exercise> exerciseList = query.getResultList();
+			if(exerciseList == null || exerciseList.size() == 0) {
+				if (loadExercises() == true) {
+					descr.setVisible(true);
+				}
 			}
+			entityManager.close();
 			if(loadWorkout()){
 				descr2.setVisible(true);
 			}

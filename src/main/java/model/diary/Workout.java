@@ -1,5 +1,6 @@
 package model.diary;
 
+import application.JPAHolder;
 import model.diary.Exercise;
 import model.user.GlobalUser;
 import model.user.User;
@@ -114,15 +115,13 @@ public class Workout implements Serializable {
 	 * @throws IOException
 	 */
 	public void saveWorkout(){
-		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		EntityManager entityManager = JPAHolder.getEntityManager();
 		User user = entityManager.find(User.class, GlobalUser.loggedUserId);
 		entityManager.getTransaction().begin();
 		user.getWorkouts().add(this);
 		entityManager.merge(user);
 		entityManager.getTransaction().commit();
 		entityManager.close();
-		entityManagerFactory.close();
 	}
 	/**
 	 * Metoda odczytująca trening
@@ -134,8 +133,7 @@ public class Workout implements Serializable {
 	 * @throws InvalidClassException
 	 */
 	public static Workout readWorkout(String fileName){
-		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		EntityManager entityManager = JPAHolder.getEntityManager();
 		User user = entityManager.find(User.class, GlobalUser.loggedUserId);
 		Workout workout = null;
 		for(Workout work : user.getWorkouts()) {
@@ -145,7 +143,6 @@ public class Workout implements Serializable {
 			}
 		}
 		entityManager.close();
-		entityManagerFactory.close();
 		return workout;
 	}
 	/**
@@ -189,13 +186,11 @@ public class Workout implements Serializable {
 	 * @throws IOException
 	 */
 	public void deleteWorkout(){
-		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		EntityManager entityManager = JPAHolder.getEntityManager();
 		entityManager.getTransaction().begin();
 		entityManager.remove(this);
 		entityManager.getTransaction().commit();
 		entityManager.close();
-		entityManagerFactory.close();
 	}
 	/**
 	 * Metoda zmieniajaca wybrane cwiczenie

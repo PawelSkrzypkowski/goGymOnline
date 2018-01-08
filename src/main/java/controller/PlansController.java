@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
+import application.JPAHolder;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -40,7 +41,6 @@ import model.user.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 /**
  * Klasa - kontroler do obslugi planow treningowych
@@ -59,12 +59,10 @@ public class PlansController {
 	 * Metoda pobierajaca plany treningowe
 	 */
 	public void downloadPlans() {
-		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		EntityManager entityManager = JPAHolder.getEntityManager();
 		User user = entityManager.find(User.class, GlobalUser.loggedUserId);
 		workoutList = user.getWorkouts();
 		entityManager.close();
-		entityManagerFactory.close();
 	}
 
 	public boolean checkIntegerCorrectness(String number) {

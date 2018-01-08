@@ -1,5 +1,6 @@
 package model.diary;
 
+import application.JPAHolder;
 import model.user.GlobalUser;
 import model.user.User;
 
@@ -41,13 +42,11 @@ public class Diary implements Serializable {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	public static LinkedList<Diary> downloadDiaries() throws ClassNotFoundException, IOException {
-		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
+	public static LinkedList<Diary> downloadDiaries(){
+		EntityManager entityManager = JPAHolder.getEntityManager();
 		User user = entityManager.find(User.class, GlobalUser.loggedUserId);
 		LinkedList<Diary> list = new LinkedList<>(user.getDiaryList());
 		entityManager.close();
-		entityManagerFactory.close();
 		return list;
 	}
 	/**
@@ -263,15 +262,13 @@ public class Diary implements Serializable {
 	 * @throws IOException
 	 */
 	public void saveDiary(){
-		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		EntityManager entityManager = JPAHolder.getEntityManager();
 		User user = entityManager.find(User.class, GlobalUser.loggedUserId);
 		entityManager.getTransaction().begin();
 		user.getDiaryList().add(this);
 		entityManager.merge(user);
 		entityManager.getTransaction().commit();
 		entityManager.close();
-		entityManagerFactory.close();
 	}
 	/**
 	 * Metoda odczytująca wybrany trening
@@ -286,8 +283,7 @@ public class Diary implements Serializable {
 		SimpleDateFormat sdf2 = new SimpleDateFormat("dd-MM-yyyy HH-mm-ss");
 		try {
 			Date date = sdf2.parse(fileName);
-			EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
-			EntityManager entityManager = entityManagerFactory.createEntityManager();
+			EntityManager entityManager = JPAHolder.getEntityManager();
 			User user = entityManager.find(User.class, GlobalUser.loggedUserId);
 			Diary diary = null;
 			for(Diary d : user.getDiaryList()) {
@@ -297,7 +293,6 @@ public class Diary implements Serializable {
 				}
 			}
 			entityManager.close();
-			entityManagerFactory.close();
 			return diary;
 		} catch (ParseException e) {
 			return null;

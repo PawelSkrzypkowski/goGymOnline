@@ -1,20 +1,15 @@
 package model.diary;
 
 
+import application.JPAHolder;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InvalidClassException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 /**
  * Klasa do obslugi cwiczen
@@ -63,13 +58,11 @@ public class Exercise implements Serializable {
 	 * @throws IOException
 	 */
 	public void saveExercise(){
-		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		EntityManager entityManager = JPAHolder.getEntityManager();
 		entityManager.getTransaction().begin();
 		entityManager.merge(this);
 		entityManager.getTransaction().commit();
 		entityManager.close();
-		entityManagerFactory.close();
 	}
 	/**
 	 * Metoda odczytująca cwiczenie
@@ -81,13 +74,11 @@ public class Exercise implements Serializable {
 	 * @throws InvalidClassException
 	 */
 	public static Exercise readExercise(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException, InvalidClassException {
-		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		EntityManager entityManager = JPAHolder.getEntityManager();
 		TypedQuery<Exercise> query = entityManager.createQuery("SELECT e FROM Exercise e WHERE e.name=:name", Exercise.class);
 		query.setParameter("name", fileName);
 		Exercise exercise = query.getSingleResult();
 		entityManager.close();
-		entityManagerFactory.close();
 		return exercise;
 	}
 	
@@ -137,12 +128,10 @@ public class Exercise implements Serializable {
 	 * @throws IOException
 	 */
 	public static List<Exercise> downloadExercises() throws FileNotFoundException, ClassNotFoundException, IOException {
-		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		EntityManager entityManager = JPAHolder.getEntityManager();
 		Query query = entityManager.createQuery("SELECT e from Exercise e");
 		List<Exercise> list = query.getResultList();
 		entityManager.close();
-		entityManagerFactory.close();
 		return list;
 	}
 

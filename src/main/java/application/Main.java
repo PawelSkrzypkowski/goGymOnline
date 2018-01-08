@@ -9,11 +9,6 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.fxml.FXMLLoader;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
 /**
  * Klasa do obsługi uruchomienia aplikacji
  * @author Paweł
@@ -25,10 +20,6 @@ public class Main extends Application {
 	 */
 	@Override
 	public void start(Stage primaryStage) {
-		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
-		entityManager.close();
-		entityManagerFactory.close();
 		try {
 			FirstStart newUser = new FirstStart();
 			if (FirstStart.checkIfUserExist() == false) {

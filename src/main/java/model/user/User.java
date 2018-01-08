@@ -1,5 +1,6 @@
 package model.user;
 
+import application.JPAHolder;
 import model.diary.Diary;
 import model.diary.Workout;
 
@@ -109,14 +110,12 @@ public class User implements Serializable {
 	 * @throws IOException
 	 */
 	public void saveUser(){
-		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		EntityManager entityManager = JPAHolder.getEntityManager();
 		this.id=GlobalUser.loggedUserId;
 		entityManager.getTransaction().begin();
 		entityManager.merge(this);
 		entityManager.getTransaction().commit();
 		entityManager.close();
-		entityManagerFactory.close();
 	}
 	/**
 	 * Metoda odczytujaca uzytkownika
@@ -127,12 +126,10 @@ public class User implements Serializable {
 	 * @throws InvalidClassException
 	 */
 	public static User readUser() throws FileNotFoundException, IOException, ClassNotFoundException, InvalidClassException {
-		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		EntityManager entityManager = JPAHolder.getEntityManager();
 		User user = entityManager.find(User.class, GlobalUser.loggedUserId);
 		user.getLogs();
 		entityManager.close();
-		entityManagerFactory.close();
 		return user;
 	}
 	/**
