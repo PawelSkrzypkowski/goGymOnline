@@ -4,6 +4,8 @@ import application.JPAHolder;
 import model.diary.Exercise;
 import model.user.GlobalUser;
 import model.user.User;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -31,21 +33,31 @@ public class Workout implements Serializable {
 	@Id
 	@GeneratedValue
 	private Long id;
+
 	@Column
 	private String workoutName;
+
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany
 	private List<Exercise> exercises;
+
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@ElementCollection
 	@OrderColumn
 	private List<Integer> setsNumber;
+
 	@ElementCollection
 	@OrderColumn
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Integer> rest;
+
 	@Column
 	@Type(type = "text")
 	private String workoutDescription;
+
 	@Column
 	private String workoutType;
+
 	@Column
 	private String difficultyLevel;
 
@@ -118,8 +130,12 @@ public class Workout implements Serializable {
 		EntityManager entityManager = JPAHolder.getEntityManager();
 		User user = entityManager.find(User.class, GlobalUser.loggedUserId);
 		entityManager.getTransaction().begin();
-		user.getWorkouts().add(this);
-		entityManager.merge(user);
+		if(this.id == null) {
+			user.getWorkouts().add(this);
+			entityManager.merge(user);
+		} else{
+			entityManager.merge(this);
+		}
 		entityManager.getTransaction().commit();
 		entityManager.close();
 	}

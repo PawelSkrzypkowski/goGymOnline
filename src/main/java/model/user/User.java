@@ -3,6 +3,8 @@ package model.user;
 import application.JPAHolder;
 import model.diary.Diary;
 import model.diary.Workout;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.io.FileInputStream;
@@ -43,10 +45,13 @@ public class User implements Serializable {
 	private String lastName;
 	@Column
 	private Date birthDate;
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Log> logs;
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Workout> workouts;
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Diary> diaryList;
 	

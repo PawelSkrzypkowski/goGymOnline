@@ -279,7 +279,7 @@ public class CalculatorsController {
 			setWaist.setText(setWaist.getText().replace(',', '.'));
 			try {
 				Double whr = Log.calculateWHR(Float.parseFloat(setHips.getText()), Float.parseFloat(setWaist.getText()));
-				score.setText("Wynik: " + whr.toString().substring(0, 4));
+				score.setText(String.format("Wynik: %.2f", whr));
 				score.setVisible(true);
 			} catch (NumberFormatException e) {
 				Alert alert = new Alert(AlertType.INFORMATION);

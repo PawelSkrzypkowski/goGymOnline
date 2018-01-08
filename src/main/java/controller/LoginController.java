@@ -50,7 +50,7 @@ public class LoginController implements Initializable {
             User user = findUser.getSingleResult();
             GlobalUser.loggedUserId = user.getId();
             VBox root = FXMLLoader.load(getClass().getResource("/StartPage.fxml"));
-            Scene scene = new Scene(root,400,600);
+            Scene scene = new Scene(root,600,400);
             scene.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
             Stage secondaryStage = new Stage();
             secondaryStage.setScene(scene);
@@ -80,6 +80,7 @@ public class LoginController implements Initializable {
                 error.setVisible(true);
             } catch (IOException e){
                 error.setText("Utworzenie sceny nie powiodło się.");
+                e.printStackTrace();
                 error.setVisible(true);
             }
         });

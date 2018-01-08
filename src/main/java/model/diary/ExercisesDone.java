@@ -1,5 +1,8 @@
 package model.diary;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -15,8 +18,11 @@ public class ExercisesDone implements Serializable {
 	@Id
 	@GeneratedValue
 	private Long id;
+
 	@OneToOne
 	private Exercise exercise;
+
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Set> sets;
 	/**

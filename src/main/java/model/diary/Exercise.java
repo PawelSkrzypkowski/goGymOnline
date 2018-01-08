@@ -2,6 +2,8 @@ package model.diary;
 
 
 import application.JPAHolder;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -22,17 +24,24 @@ public class Exercise implements Serializable {
 	@Id
 	@GeneratedValue
 	private Long id;
+
 	@Column
 	private String name;
+
 	// private Obrazek obrazek;
+
 	@Column
 	@Type(type = "text")
 	private String description;
+
 	@ElementCollection
 	@OrderColumn
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private String[] workingMuscles;
+
 	@Column
 	private int record;
+
 	@Column
 	private int recordReps;
 	/**

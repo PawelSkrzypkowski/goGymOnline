@@ -3,6 +3,8 @@ package model.diary;
 import application.JPAHolder;
 import model.user.GlobalUser;
 import model.user.User;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.io.File;
@@ -28,12 +30,17 @@ public class Diary implements Serializable {
 	@Id
 	@GeneratedValue
 	private Long id;
+
 	@Column
 	private Date startDate;
+
 	@Column
 	private Date finishDate;
+
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<ExercisesDone> exercisesDone;
+
 	@Column
 	private Integer restTime;//seconds
 	/**
@@ -265,8 +272,12 @@ public class Diary implements Serializable {
 		EntityManager entityManager = JPAHolder.getEntityManager();
 		User user = entityManager.find(User.class, GlobalUser.loggedUserId);
 		entityManager.getTransaction().begin();
-		user.getDiaryList().add(this);
-		entityManager.merge(user);
+		if(this.id == null) {
+			user.getDiaryList().add(this);
+			entityManager.merge(user);
+		} else{
+			entityManager.merge(this);
+		}
 		entityManager.getTransaction().commit();
 		entityManager.close();
 	}
@@ -281,22 +292,17 @@ public class Diary implements Serializable {
 	 */
 	public static Diary readDiary(String fileName){
 		SimpleDateFormat sdf2 = new SimpleDateFormat("dd-MM-yyyy HH-mm-ss");
-		try {
-			Date date = sdf2.parse(fileName);
-			EntityManager entityManager = JPAHolder.getEntityManager();
-			User user = entityManager.find(User.class, GlobalUser.loggedUserId);
-			Diary diary = null;
-			for(Diary d : user.getDiaryList()) {
-				if(d.getStartDate().equals(date)) {
-					diary = d;
-					break;
-				}
+		EntityManager entityManager = JPAHolder.getEntityManager();
+		User user = entityManager.find(User.class, GlobalUser.loggedUserId);
+		Diary diary = null;
+		for(Diary d : user.getDiaryList()) {
+			if(sdf2.format(d.getStartDate()).equals(fileName)) {
+				diary = d;
+				break;
 			}
-			entityManager.close();
-			return diary;
-		} catch (ParseException e) {
-			return null;
 		}
+		entityManager.close();
+		return diary;
 	}
 	public Date getStartDate() {
 		return startDate;

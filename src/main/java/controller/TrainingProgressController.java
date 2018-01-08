@@ -150,8 +150,7 @@ public class TrainingProgressController {
 	 * @param fileName
 	 */
 	public void showTrainingSummary(VBox mainPage, String fileName) {
-		Diary diary = null;
-		diary = Diary.readDiary(fileName);
+		Diary diary = Diary.readDiary(fileName);
 		mainPage.getChildren().clear();
 		SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 		Label summary = new Label("Podsumowanie treningu z dnia " + format.format(diary.getStartDate()));
