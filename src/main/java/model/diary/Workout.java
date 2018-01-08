@@ -20,6 +20,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 /**
@@ -32,22 +33,25 @@ public class Workout implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue
+	@Column(name = "id_workout")
 	private Long id;
 
 	@Column
 	private String workoutName;
 
 	@LazyCollection(LazyCollectionOption.FALSE)
-	@OneToMany
+	@ManyToMany
+	@JoinTable(name = "workout_exercise",
+			joinColumns = {@JoinColumn(name="workout_id", referencedColumnName="id_workout")},
+			inverseJoinColumns = {@JoinColumn(name="exercise_id", referencedColumnName="id_exercise")}
+	)
 	private List<Exercise> exercises;
 
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ElementCollection
-	@OrderColumn
 	private List<Integer> setsNumber;
 
 	@ElementCollection
-	@OrderColumn
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Integer> rest;
 
@@ -128,12 +132,21 @@ public class Workout implements Serializable {
 	 */
 	public void saveWorkout(){
 		EntityManager entityManager = JPAHolder.getEntityManager();
-		User user = entityManager.find(User.class, GlobalUser.loggedUserId);
 		entityManager.getTransaction().begin();
 		if(this.id == null) {
+			User user = entityManager.find(User.class, GlobalUser.loggedUserId);
 			user.getWorkouts().add(this);
 			entityManager.merge(user);
 		} else{
+			List<Integer> rest = this.rest;
+			List<Integer> sets = this.setsNumber;
+			this.rest = new ArrayList<>();
+			this.setsNumber = new ArrayList<>();
+			entityManager.merge(this);
+			this.rest = rest;
+			this.setsNumber = sets;
+			System.out.println("Rest - tabela: " + rest);
+			System.out.println(sets);
 			entityManager.merge(this);
 		}
 		entityManager.getTransaction().commit();

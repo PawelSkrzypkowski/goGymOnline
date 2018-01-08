@@ -27,7 +27,6 @@ public class Set implements Serializable{
 
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@ElementCollection
-	@OrderColumn
 	private List<Double> weight;
 
 

@@ -77,7 +77,7 @@ public class PlansController {
 	}
 
 	public boolean checkStringCorrectness(String name) {
-		Pattern pattern = Pattern.compile("[^A-Za-z0-9żźćńółęąśŻŹĆĄŚĘŁÓŃ -]");
+		Pattern pattern = Pattern.compile("[^A-Za-z0-9żźćńółęąśŻŹĆĄŚĘŁÓŃs\\s\\-,]");
 		Matcher matcher = pattern.matcher(name);
 		if (matcher.find() == true || name.length() == 0)// jesli zostal
 															// odnaleziony znak

@@ -23,6 +23,7 @@ public class Exercise implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue
+	@Column(name = "id_exercise")
 	private Long id;
 
 	@Column
@@ -44,6 +45,9 @@ public class Exercise implements Serializable {
 
 	@Column
 	private int recordReps;
+
+	@ManyToMany(mappedBy = "exercises")
+	private List<Workout> workouts;
 	/**
 	 * Konstruktor tworzacy cwiczenie
 	 * @param name
