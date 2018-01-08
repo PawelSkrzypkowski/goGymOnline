@@ -247,27 +247,18 @@ public class TrainingProgressController {
 		mainPage.getChildren().addAll(trainingsSummaries, showExercisesSummaries, showMonthByMonthSummaries, showMeansurmentsSummaries);
 		trainingsSummaries.setOnAction((event) -> {
 			mainPage.getChildren().clear();
-			try {
-				LinkedList<Diary> list = Diary.downloadDiaries();
-				SortedSet<Date> set = new TreeSet<Date>(Collections.reverseOrder());
-				for(Diary d : list)
-					set.add(d.getStartDate());
-				for(Date date : set){
-					SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-					Button button = new Button("Trening z dnia: " + sdf.format(date));
-					mainPage.getChildren().add(button);
-					button.setOnAction((event2) -> {
-						SimpleDateFormat sdf2 = new SimpleDateFormat("dd-MM-yyyy HH-mm-ss");
-						showTrainingSummary(mainPage, sdf2.format(date));
-					});
-				}
-			} catch (ClassNotFoundException | IOException e) {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Błąd: " + e.toString()
-						+ ". Błąd odczytu pliku.");
-				alert.showAndWait();
+			LinkedList<Diary> list = Diary.downloadDiaries();
+			SortedSet<Date> set = new TreeSet<Date>(Collections.reverseOrder());
+			for(Diary d : list)
+				set.add(d.getStartDate());
+			for(Date date : set){
+				SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+				Button button = new Button("Trening z dnia: " + sdf.format(date));
+				mainPage.getChildren().add(button);
+				button.setOnAction((event2) -> {
+					SimpleDateFormat sdf2 = new SimpleDateFormat("dd-MM-yyyy HH-mm-ss");
+					showTrainingSummary(mainPage, sdf2.format(date));
+				});
 			}
 		});
 		showExercisesSummaries.setOnAction((event) -> {

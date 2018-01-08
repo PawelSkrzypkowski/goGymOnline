@@ -18,7 +18,7 @@ import model.user.Log;
 import model.user.User;
 /**
  * Klasa - kontroler modułu aplikacji do dodawania pomiarów ciała
- * @author Pawe�
+ * @author Paweł
  *
  */
 public class LogsController implements Initializable {
@@ -81,7 +81,7 @@ public class LogsController implements Initializable {
 		}
 	}
 	/**
-	 * MEtoda inicjalizująca i tworząca widok do dodawania pomiarów
+	 * Metoda inicjalizująca i tworząca widok do dodawania pomiarów
 	 */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {

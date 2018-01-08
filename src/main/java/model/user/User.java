@@ -32,6 +32,10 @@ public class User implements Serializable {
 	@GeneratedValue
 	private Long id;
 	@Column
+	private String login;
+	@Column
+	private String password;
+	@Column
 	private Date startDate = new Date();
 	@Column
 	private String firstName;
@@ -96,14 +100,29 @@ public class User implements Serializable {
 	}
 
 	public User() {
-		this.setLogs(new LinkedList<Log>());
+		this.setLogs(new LinkedList<>());
+		this.setWorkouts(new LinkedList<>());
+		this.setDiaryList(new LinkedList<>());
 	}
 
 	public User(String firstName, String lastName, Date birthDate) {
 		this.setFirstName(firstName);
 		this.setLastName(lastName);
 		this.setBirthDate(birthDate);
-		this.setLogs(new LinkedList<Log>());
+		this.setLogs(new LinkedList<>());
+		this.setWorkouts(new LinkedList<>());
+		this.setDiaryList(new LinkedList<>());
+	}
+
+	public User(String firstName, String lastName, Date birthDate, String login, String password) {
+		this.setFirstName(firstName);
+		this.setLastName(lastName);
+		this.setBirthDate(birthDate);
+		this.login = login;
+		this.password = password;
+		this.setLogs(new LinkedList<>());
+		this.setWorkouts(new LinkedList<>());
+		this.setDiaryList(new LinkedList<>());
 	}
 	/**
 	 * Metoda zapisujaca uzytkownika
@@ -113,7 +132,8 @@ public class User implements Serializable {
 		EntityManager entityManager = JPAHolder.getEntityManager();
 		this.id=GlobalUser.loggedUserId;
 		entityManager.getTransaction().begin();
-		entityManager.merge(this);
+		User user = entityManager.merge(this);
+		GlobalUser.loggedUserId = user.getId();
 		entityManager.getTransaction().commit();
 		entityManager.close();
 	}
@@ -241,6 +261,9 @@ public class User implements Serializable {
 		this.diaryList = diaryList;
 	}
 
+	public Long getId() {
+		return id;
+	}
 	@Override
 	public String toString() {
 		return "User [startDate=" + startDate + ", firstName=" + firstName + ", lastName=" + lastName + ", birthDate="
