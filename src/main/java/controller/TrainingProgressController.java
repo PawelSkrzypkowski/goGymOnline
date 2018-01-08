@@ -33,7 +33,7 @@ import model.user.User;
 
 /**
  * Klasa - kontroler obsługujący sekcję do przeglądania postępów treningowych
- * @author Pawe�
+ * @author Paweł
  *
  */
 public class TrainingProgressController {
@@ -92,7 +92,7 @@ public class TrainingProgressController {
 			Float min = (float) 999;
 			for(Entry<Date, Float> entry : tm.entrySet()){
 				SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-				series.getData().add(new XYChart.Data<String, Number>(sdf.format(entry.getKey()), entry.getValue()));
+				series.getData().add(new XYChart.Data<>(sdf.format(entry.getKey()), entry.getValue()));
 				if(max < entry.getValue())
 					max = entry.getValue();
 				if(min > entry.getValue())

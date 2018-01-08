@@ -1,7 +1,6 @@
 package model.diary;
 
 import application.JPAHolder;
-import model.diary.Exercise;
 import model.user.GlobalUser;
 import model.user.User;
 import org.hibernate.annotations.LazyCollection;
@@ -9,17 +8,10 @@ import org.hibernate.annotations.LazyCollectionOption;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InvalidClassException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;

@@ -1,6 +1,5 @@
 package controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -160,7 +159,7 @@ public class PlansController {
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Informacja");
 			alert.setHeaderText("");
-			alert.setContentText("Błąd pliku. Błąd: " + e.toString());
+			alert.setContentText("Błąd: " + e.toString());
 			alert.showAndWait();
 		} catch(NumberFormatException e) {
 			Alert alert = new Alert(AlertType.INFORMATION);
