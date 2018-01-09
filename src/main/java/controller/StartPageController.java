@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 
 
 import application.Logs;
+import controller.utility.AlertUtility;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -55,92 +56,69 @@ public class StartPageController implements Initializable {
 	 */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		try {
-			loadUserDetails();
+		loadUserDetails();
+		loadMain();
+		plansButton.setOnAction((event) -> {
+			PlansController plansController = new PlansController();
+			plansController.createStage(mainPage);
+		});
+		homeButton.setOnAction((event) -> {
+			page.getChildren().remove(page.getChildren().size() - 1);
+			mainPage.getChildren().clear();
 			loadMain();
-			plansButton.setOnAction((event) -> {
-				PlansController plansController = new PlansController();
-				plansController.createStage(mainPage);
-			});
-			homeButton.setOnAction((event) -> {
-				page.getChildren().remove(page.getChildren().size() - 1);
-				mainPage.getChildren().clear();
-				loadMain();
-			});
-			progressButton.setOnAction((event) -> {
-				TrainingProgressController trainingProgressController = new TrainingProgressController();
-				trainingProgressController.createStage(mainPage);
-			});
-			logsButton.setOnAction((event) -> {
-				Logs logs = new Logs();
-				try {
-					logs.createStage(mainPage);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+		});
+		progressButton.setOnAction((event) -> {
+			TrainingProgressController trainingProgressController = new TrainingProgressController();
+			trainingProgressController.createStage(mainPage);
+		});
+		logsButton.setOnAction((event) -> {
+			Logs logs = new Logs();
+			try {
+				logs.createStage(mainPage);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
+		calculatorsButton.setOnAction((event) -> {
+			CalculatorsController cc = new CalculatorsController();
+			cc.createStage(mainPage);
+		});
+		refreshUserData.setOnMouseClicked((event) -> {// moze by dodac
+			// podswietlnie? :)
+			loadUserDetails();
+		});
+		editAvatar.setOnMouseClicked((event) -> {
+			FileChooser chooseFile = new FileChooser();
+			chooseFile.setTitle("Wybierz plik");
+			chooseFile.getExtensionFilters().add(new ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
+			Stage stage = (Stage) root.getScene().getWindow();
+			File file = chooseFile.showOpenDialog(stage);
+			if (file != null) {
+				Image image = new Image(file.toURI().toString());
+				if (image.getWidth() / image.getHeight() > avatar.getFitWidth() / avatar.getFitHeight()) {
+					image = new Image(file.toURI().toString(), avatar.getFitWidth(), avatar.getFitHeight(), false,
+							false);
+				} else {
+					image = new Image(file.toURI().toString(), avatar.getFitWidth(), avatar.getFitHeight(), true,
+							false);
 				}
-			});
-			calculatorsButton.setOnAction((event) -> {
-				CalculatorsController cc = new CalculatorsController();
-				cc.createStage(mainPage);
-			});
-			refreshUserData.setOnMouseClicked((event) -> {// moze by dodac
-															// podswietlnie? :)
-				try {
-					loadUserDetails();
-				} catch (ClassNotFoundException | IOException e) {
-					Alert alert = new Alert(AlertType.INFORMATION);
-					alert.setTitle("Informacja");
-					alert.setHeaderText("");
-					alert.setContentText("Błąd: " + e.toString()
-							+ ". Uszkodzony lub brak pliku użytkownika! Usuń lub przywróc plik user i uruchom aplikacje ponownie.");
-					alert.showAndWait();
+				double margin = (avatar.getFitWidth() - image.getWidth()) / 2;
+				avatar.setX(margin);
+				BufferedImage bi = SwingFXUtils.fromFXImage(image, null);
+				try{
+					ByteArrayOutputStream baos = new ByteArrayOutputStream();
+					ImageIO.write(bi, "png", baos);
+					Blob blFile = BlobProxy.generateProxy(baos.toByteArray());
+					User user = User.readUser();
+					user.setAvatar(blFile);
+					user.saveUser();
+					loadAvatar();
+				} catch(IOException e){
+					AlertUtility.fileSavingError(e);
 				}
-			});
-			editAvatar.setOnMouseClicked((event) -> {
-				FileChooser chooseFile = new FileChooser();
-				chooseFile.setTitle("Wybierz plik");
-				chooseFile.getExtensionFilters().add(new ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
-				Stage stage = (Stage) root.getScene().getWindow();
-				File file = chooseFile.showOpenDialog(stage);
-				if (file != null) {
-					Image image = new Image(file.toURI().toString());
-					if (image.getWidth() / image.getHeight() > avatar.getFitWidth() / avatar.getFitHeight()) {
-						image = new Image(file.toURI().toString(), avatar.getFitWidth(), avatar.getFitHeight(), false,
-								false);
-					} else {
-						image = new Image(file.toURI().toString(), avatar.getFitWidth(), avatar.getFitHeight(), true,
-								false);
-					}
-					double margin = (avatar.getFitWidth() - image.getWidth()) / 2;
-					avatar.setX(margin);
-					BufferedImage bi = SwingFXUtils.fromFXImage(image, null);
-					try{
-						ByteArrayOutputStream baos = new ByteArrayOutputStream();
-						ImageIO.write(bi, "png", baos);
-						Blob blFile = BlobProxy.generateProxy(baos.toByteArray());
-						User user = User.readUser();
-						user.setAvatar(blFile);
-						user.saveUser();
-						loadAvatar();
-					} catch(IOException e){
-						Alert alert = new Alert(AlertType.INFORMATION);
-						alert.setTitle("Informacja");
-						alert.setHeaderText("");
-						alert.setContentText("Błąd: " + e.toString()
-								+ ". Zapis pliku nie powiódł się.");
-						alert.showAndWait();
-					}
-				}
-			});
-		} catch (ClassNotFoundException | IOException e) {
-			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Informacja");
-			alert.setHeaderText("");
-			alert.setContentText("Błąd: " + e.toString()
-					+ ". Uszkodzony lub brak pliku użytkownika! Usuń lub przywróc plik user i uruchom aplikacje ponownie.");
-			alert.showAndWait();
-		}
+			}
+		});
 	}
 	/**
 	 * Metoda ladujaca dane uzytkownika
@@ -149,8 +127,7 @@ public class StartPageController implements Initializable {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	public void loadUserDetails()
-			throws InvalidClassException, FileNotFoundException, ClassNotFoundException, IOException {
+	public void loadUserDetails(){
 		User user = User.readUser();
 		userData.setText("Witaj " + user.getFirstName() + " " + user.getLastName() + "!\n" + "Waga: "
 				+ user.getLogs().get(user.getLogs().size() - 1).getWeight() + " kg\n" + "Wiek: " + user.calculateAge()

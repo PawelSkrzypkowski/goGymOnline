@@ -7,6 +7,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
+import controller.utility.AlertUtility;
+import controller.utility.LogsControllerUtility;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,49 +29,26 @@ public class LogsController implements Initializable {
 	@FXML
 	private Button addLog;
 	private TextField[] logTable=new TextField[9];
-	public boolean checkFloatCorrectness(String number) {
-		Pattern pattern = Pattern.compile("[^0-9,.]");
-		Matcher matcher = pattern.matcher(number);
-		if (matcher.find() == true)// jesli zostal odnaleziony znak spoza
-									// zakresu 0-9 , .
-			return false;
-		return true;
-	}
+
 	/**
 	 * Metoda przechwyująca dodawania pomiaru
 	 * @param event
 	 */
 	public void addLog(ActionEvent event){
 		Float[] logInFloat = new Float[9];
-		int i = 0;
 		boolean fail = false;
-		for (TextField field : logTable) {
-			field.setText(field.getText().replace(',', '.'));
-			if (field.getText().isEmpty() == true)
-				field.setText("0");
-			try {
-				logInFloat[i] = Float.parseFloat(field.getText());
-			} catch (NumberFormatException e){// jesli zly format liczby
-				fail = true;
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Wprowadzona wartość nie jest liczbą");
-				alert.showAndWait();
-				break;
+		try {
+			logInFloat = LogsControllerUtility.textFieldArrayToFloatArray(logTable);
+		} catch (NumberFormatException e){// jesli zly format liczby
+			fail = true;
+			AlertUtility.noNumberValue();
 			}
-			i++;
-		}
 		if (fail == false) {// jesli mozna dodac log
 			User user = User.readUser();
 			Log log = new Log(logInFloat);
 			user.addLog(log);
 			user.saveUser();
-			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Informacja");
-			alert.setHeaderText("");
-			alert.setContentText("Dodałeś pomiary!");
-			alert.showAndWait();
+			AlertUtility.logsAdded();
 		}
 	}
 	/**
@@ -82,7 +61,7 @@ public class LogsController implements Initializable {
 		this.logTable = logTable;
 		for (TextField field : logTable) {// dodaje listenery
 			field.textProperty().addListener((observable, oldValue, newValue) -> {
-				if (checkFloatCorrectness(field.getText()) == false)
+				if (!LogsControllerUtility.checkFloatCorrectness(field.getText()))
 					field.setText(oldValue);
 			});
 		}

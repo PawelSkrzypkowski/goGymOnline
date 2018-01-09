@@ -57,7 +57,7 @@ public class Diary implements Serializable {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	public static Double getMonthlyRaisedWeight(int minusMonth) throws ClassNotFoundException, IOException{//dzisiejszy miesiac - minusMonth
+	public static Double getMonthlyRaisedWeight(int minusMonth){//dzisiejszy miesiac - minusMonth
 		LinkedList<Diary> diary = getDiariesFromMonth(minusMonth);
 		Double weight = 0.0;
 		for(Diary d : diary){
@@ -72,7 +72,7 @@ public class Diary implements Serializable {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	public static LinkedList<Diary> getDiariesFromMonth(int minusMonth) throws ClassNotFoundException, IOException{
+	public static LinkedList<Diary> getDiariesFromMonth(int minusMonth){
 		Calendar cal1 = Calendar.getInstance();
 		Calendar cal2 = Calendar.getInstance();
 		int yearNumber1, yearNumber2;
@@ -105,7 +105,7 @@ public class Diary implements Serializable {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	public static Integer getMonthlyTrainingTime(int minusMonth) throws ClassNotFoundException, IOException{//dzisiejszy miesiac - minusMonth
+	public static Integer getMonthlyTrainingTime(int minusMonth){//dzisiejszy miesiac - minusMonth
 		LinkedList<Diary> diaries = getDiariesFromMonth(minusMonth);
 		Integer trainingTime = 0;
 		for(Diary d : diaries){
@@ -120,7 +120,7 @@ public class Diary implements Serializable {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	public static Integer getMonthlyExercisingTime(int minusMonth) throws ClassNotFoundException, IOException{//dzisiejszy miesiac - minusMonth
+	public static Integer getMonthlyExercisingTime(int minusMonth){//dzisiejszy miesiac - minusMonth
 		LinkedList<Diary> diaries = getDiariesFromMonth(minusMonth);
 		Integer exercisingTime = 0;
 		for(Diary d : diaries){
@@ -135,7 +135,7 @@ public class Diary implements Serializable {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	public static Integer getMonthlyRestTime(int minusMonth) throws ClassNotFoundException, IOException{//dzisiejszy miesiac - minusMonth
+	public static Integer getMonthlyRestTime(int minusMonth){//dzisiejszy miesiac - minusMonth
 		LinkedList<Diary> diaries = getDiariesFromMonth(minusMonth);
 		Integer restTime = 0;
 		for(Diary d : diaries){
@@ -150,7 +150,7 @@ public class Diary implements Serializable {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	public static Integer getMonthlyExercisesDone(int minusMonth) throws ClassNotFoundException, IOException{//dzisiejszy miesiac - minusMonth
+	public static Integer getMonthlyExercisesDone(int minusMonth){//dzisiejszy miesiac - minusMonth
 		LinkedList<Diary> diaries = getDiariesFromMonth(minusMonth);
 		Integer exercisesDone = 0;
 		for(Diary d : diaries){
@@ -165,7 +165,7 @@ public class Diary implements Serializable {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	public static TreeMap<Date, Double> getMapDateRecord(Exercise exercise) throws ClassNotFoundException, IOException{
+	public static TreeMap<Date, Double> getMapDateRecord(Exercise exercise){
 		LinkedList<Diary> diaries = downloadDiaries();
 		TreeMap<Date, Double> hm = new TreeMap<Date, Double>();
 		for(Diary diary : diaries){

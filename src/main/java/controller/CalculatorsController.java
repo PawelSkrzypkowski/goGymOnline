@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InvalidClassException;
 
+import controller.utility.AlertUtility;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -71,11 +72,7 @@ public class CalculatorsController {
 				score.setText("Wynik: " + bmi.toString().substring(0, 4));
 				score.setVisible(true);
 			} catch (NumberFormatException e) {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Wprowadzona wartość nie jest liczbą");
-				alert.showAndWait();
+				AlertUtility.noNumberValue();
 			}
 		});
 	}
@@ -132,11 +129,7 @@ public class CalculatorsController {
 				score.setText("Wynik: " + bmr.toString());
 				score.setVisible(true);
 			} catch (NumberFormatException e) {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Wprowadzona wartość nie jest liczbą�");
-				alert.showAndWait();
+				AlertUtility.noNumberValue();
 			}
 		});
 	}
@@ -179,11 +172,7 @@ public class CalculatorsController {
 				score.setText("Wynik: " + pw.toString().substring(0, 4));
 				score.setVisible(true);
 			} catch (NumberFormatException e) {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Wprowadzona wartość nie jest liczbą");
-				alert.showAndWait();
+				AlertUtility.noNumberValue();
 			}
 		});
 	}
@@ -236,11 +225,7 @@ public class CalculatorsController {
 				score.setText("Wynik: " + pw.toString().substring(0, 4));
 				score.setVisible(true);
 			} catch (NumberFormatException e) {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Wprowadzona wartość nie jest liczbą");
-				alert.showAndWait();
+				AlertUtility.noNumberValue();
 			}
 		});
 	}
@@ -282,11 +267,7 @@ public class CalculatorsController {
 				score.setText(String.format("Wynik: %.2f", whr));
 				score.setVisible(true);
 			} catch (NumberFormatException e) {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Wprowadzona wartość nie jest liczbą");
-				alert.showAndWait();
+				AlertUtility.noNumberValue();
 			}
 		});
 	}
@@ -318,11 +299,7 @@ public class CalculatorsController {
 			try {
 				showBMR(mainPage);
 			} catch (ClassNotFoundException | IOException e) {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Błąd odczytu pliku. Błąd: " + e.toString());
-				alert.showAndWait();
+				AlertUtility.errorFileReading(e);
 			}
 		});
 		perfectWeight.setOnAction((event) -> {
@@ -332,22 +309,14 @@ public class CalculatorsController {
 			try {
 				showFat(mainPage);
 			} catch (ClassNotFoundException | IOException e) {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Błąd odczytu pliku. Błąd: " + e.toString());
-				alert.showAndWait();
+				AlertUtility.errorFileReading(e);
 			}
 		});
 		WHR.setOnAction((event) -> {
 			try {
 				showWHR(mainPage);
 			} catch (ClassNotFoundException | IOException e) {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Błąd odczytu pliku. Błąd: " + e.toString());
-				alert.showAndWait();
+				AlertUtility.errorFileReading(e);
 			}
 		});
 	}

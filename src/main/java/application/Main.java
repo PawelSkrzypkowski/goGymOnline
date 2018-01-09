@@ -17,7 +17,7 @@ import javafx.fxml.FXMLLoader;
 public class Main extends Application {
 	public static Stage stage;
 	/**
-	 * Metoda decydująca czy utworzyć scenę do normalnego użytkowania czy stworzyć obiekt FirstStart
+	 * Metoda tworząca scene logowania
 	 */
 	@Override
 	public void start(Stage primaryStage) {

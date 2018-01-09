@@ -140,7 +140,7 @@ public class Exercise implements Serializable {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	public static List<Exercise> downloadExercises() throws FileNotFoundException, ClassNotFoundException, IOException {
+	public static List<Exercise> downloadExercises(){
 		EntityManager entityManager = JPAHolder.getEntityManager();
 		Query query = entityManager.createQuery("SELECT e from Exercise e");
 		List<Exercise> list = query.getResultList();
