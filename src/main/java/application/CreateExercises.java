@@ -59,6 +59,7 @@ public class CreateExercises {
 			if(loadWorkout()){
 				descr2.setVisible(true);
 			}
+			stage.close();
 			Main newStart = new Main();
 			newStart.start(new Stage());
 		} catch (IOException | ClassNotFoundException e) {

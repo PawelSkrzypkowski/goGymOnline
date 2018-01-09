@@ -1,6 +1,10 @@
 package model.user;
 
 import application.JPAHolder;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import model.diary.Diary;
 import model.diary.Workout;
 import org.hibernate.annotations.LazyCollection;
@@ -13,6 +17,7 @@ import java.io.InvalidClassException;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.Blob;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
@@ -24,6 +29,10 @@ import java.util.TreeMap;
  *
  */
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
@@ -50,81 +59,9 @@ public class User implements Serializable {
 	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Diary> diaryList;
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((birthDate == null) ? 0 : birthDate.hashCode());
-		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-		result = prime * result + ((logs == null) ? 0 : logs.hashCode());
-		result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
-		return result;
-	}
+	@Lob
+	private Blob avatar;
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		User other = (User) obj;
-		if (birthDate == null) {
-			if (other.birthDate != null)
-				return false;
-		} else if (!birthDate.equals(other.birthDate))
-			return false;
-		if (firstName == null) {
-			if (other.firstName != null)
-				return false;
-		} else if (!firstName.equals(other.firstName))
-			return false;
-		if (lastName == null) {
-			if (other.lastName != null)
-				return false;
-		} else if (!lastName.equals(other.lastName))
-			return false;
-		if (logs == null) {
-			if (other.logs != null)
-				return false;
-		} else if (!logs.equals(other.logs))
-			return false;
-		if (startDate == null) {
-			if (other.startDate != null)
-				return false;
-		} else if (!startDate.equals(other.startDate))
-			return false;
-		return true;
-	}
-
-	public User() {
-		this.setLogs(new LinkedList<>());
-		this.setWorkouts(new LinkedList<>());
-		this.setDiaryList(new LinkedList<>());
-	}
-
-	public User(String firstName, String lastName, Date birthDate) {
-		this.setFirstName(firstName);
-		this.setLastName(lastName);
-		this.setBirthDate(birthDate);
-		this.setLogs(new LinkedList<>());
-		this.setWorkouts(new LinkedList<>());
-		this.setDiaryList(new LinkedList<>());
-	}
-
-	public User(String firstName, String lastName, Date birthDate, String login, String password) {
-		this.setFirstName(firstName);
-		this.setLastName(lastName);
-		this.setBirthDate(birthDate);
-		this.login = login;
-		this.password = password;
-		this.setLogs(new LinkedList<>());
-		this.setWorkouts(new LinkedList<>());
-		this.setDiaryList(new LinkedList<>());
-	}
 	/**
 	 * Metoda zapisujaca uzytkownika
 	 * @throws IOException
@@ -146,7 +83,7 @@ public class User implements Serializable {
 	 * @throws ClassNotFoundException
 	 * @throws InvalidClassException
 	 */
-	public static User readUser() throws FileNotFoundException, IOException, ClassNotFoundException, InvalidClassException {
+	public static User readUser(){
 		EntityManager entityManager = JPAHolder.getEntityManager();
 		User user = entityManager.find(User.class, GlobalUser.loggedUserId);
 		user.getLogs();
@@ -204,70 +141,5 @@ public class User implements Serializable {
 
 	public void removeLog(int index) {
 		logs.remove(index);
-	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public Date getBirthDate() {
-		return birthDate;
-	}
-
-	public void setBirthDate(Date birthDate) {
-		this.birthDate = birthDate;
-	}
-
-	public List<Log> getLogs() {
-		return logs;
-	}
-
-	public void setLogs(List<Log> logs) {
-		this.logs = logs;
-	}
-
-	public List<Workout> getWorkouts() {
-		return workouts;
-	}
-
-	public void setWorkouts(List<Workout> workouts) {
-		this.workouts = workouts;
-	}
-
-	public List<Diary> getDiaryList() {
-		return diaryList;
-	}
-
-	public void setDiaryList(List<Diary> diaryList) {
-		this.diaryList = diaryList;
-	}
-
-	public Long getId() {
-		return id;
-	}
-	@Override
-	public String toString() {
-		return "User [startDate=" + startDate + ", firstName=" + firstName + ", lastName=" + lastName + ", birthDate="
-				+ birthDate + ", logs=" + logs + "]";
 	}
 }

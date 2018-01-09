@@ -1,20 +1,21 @@
 package controller;
 
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Base64;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import application.CreateExercises;
 import application.JPAHolder;
+import com.google.common.io.ByteStreams;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -26,6 +27,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.user.Log;
 import model.user.User;
+import org.hibernate.engine.jdbc.BlobProxy;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -148,7 +150,12 @@ public class FirstStartController implements Initializable {
 				MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
 				byte[] hash = messageDigest.digest(password.getText().getBytes(StandardCharsets.UTF_8));
 				String encode = Base64.getEncoder().encodeToString(hash);
-				User user = new User(setFirstName.getText(), setLastName.getText(), birthDate, login.getText(), encode);
+				ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+				InputStream defaultImage = classloader.getResourceAsStream("images/avatar.png");
+				byte[] data = ByteStreams.toByteArray(defaultImage);
+				User user = User.builder().firstName(setFirstName.getText()).lastName(setLastName.getText()).
+						birthDate(birthDate).login(login.getText()).password(encode).
+						avatar(BlobProxy.generateProxy(data)).logs(new ArrayList<>()).build();
 				Log log = new Log(logInFloat);
 				user.addLog(log);
 				user.saveUser();
@@ -174,6 +181,12 @@ public class FirstStartController implements Initializable {
 				alert.setTitle("Informacja");
 				alert.setHeaderText("");
 				alert.setContentText("Błąd algorytmu hashującego");
+				alert.showAndWait();
+			} catch (IOException e) {
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Informacja");
+				alert.setHeaderText("");
+				alert.setContentText("Nie udany zapis podstawowego avatara");
 				alert.showAndWait();
 			}
 		}

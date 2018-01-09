@@ -61,23 +61,15 @@ public class LogsController implements Initializable {
 			i++;
 		}
 		if (fail == false) {// jesli mozna dodac log
-			try {
-				User user = User.readUser();
-				Log log = new Log(logInFloat);
-				user.addLog(log);
-				user.saveUser();
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Dodałeś pomiary!");
-				alert.showAndWait();
-			} catch (IOException | ClassNotFoundException e) {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Błąd: " + e.toString());
-				alert.showAndWait();
-			}
+			User user = User.readUser();
+			Log log = new Log(logInFloat);
+			user.addLog(log);
+			user.saveUser();
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Informacja");
+			alert.setHeaderText("");
+			alert.setContentText("Dodałeś pomiary!");
+			alert.showAndWait();
 		}
 	}
 	/**
