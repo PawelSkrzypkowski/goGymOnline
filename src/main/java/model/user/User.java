@@ -1,19 +1,23 @@
 package model.user;
 
+import application.JPAHolder;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import model.diary.Diary;
 import model.diary.Workout;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InvalidClassException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.Blob;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
@@ -25,11 +29,19 @@ import java.util.TreeMap;
  *
  */
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue
 	private Long id;
+	@Column
+	private String login;
+	@Column
+	private String password;
 	@Column
 	private Date startDate = new Date();
 	@Column
@@ -38,85 +50,30 @@ public class User implements Serializable {
 	private String lastName;
 	@Column
 	private Date birthDate;
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Log> logs;
-	@OneToMany
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<Workout> workouts;
-	@OneToMany
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@OneToMany(cascade = CascadeType.ALL)
 	private List<Diary> diaryList;
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((birthDate == null) ? 0 : birthDate.hashCode());
-		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-		result = prime * result + ((logs == null) ? 0 : logs.hashCode());
-		result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
-		return result;
-	}
+	@Lob
+	private Blob avatar;
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		User other = (User) obj;
-		if (birthDate == null) {
-			if (other.birthDate != null)
-				return false;
-		} else if (!birthDate.equals(other.birthDate))
-			return false;
-		if (firstName == null) {
-			if (other.firstName != null)
-				return false;
-		} else if (!firstName.equals(other.firstName))
-			return false;
-		if (lastName == null) {
-			if (other.lastName != null)
-				return false;
-		} else if (!lastName.equals(other.lastName))
-			return false;
-		if (logs == null) {
-			if (other.logs != null)
-				return false;
-		} else if (!logs.equals(other.logs))
-			return false;
-		if (startDate == null) {
-			if (other.startDate != null)
-				return false;
-		} else if (!startDate.equals(other.startDate))
-			return false;
-		return true;
-	}
-
-	public User() {
-		this.setLogs(new LinkedList<Log>());
-	}
-
-	public User(String firstName, String lastName, Date birthDate) {
-		this.setFirstName(firstName);
-		this.setLastName(lastName);
-		this.setBirthDate(birthDate);
-		this.setLogs(new LinkedList<Log>());
-	}
 	/**
 	 * Metoda zapisujaca uzytkownika
 	 * @throws IOException
 	 */
 	public void saveUser(){
-		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		EntityManager entityManager = JPAHolder.getEntityManager();
 		this.id=GlobalUser.loggedUserId;
 		entityManager.getTransaction().begin();
-		entityManager.merge(this);
+		User user = entityManager.merge(this);
+		GlobalUser.loggedUserId = user.getId();
 		entityManager.getTransaction().commit();
 		entityManager.close();
-		entityManagerFactory.close();
 	}
 	/**
 	 * Metoda odczytujaca uzytkownika
@@ -126,13 +83,11 @@ public class User implements Serializable {
 	 * @throws ClassNotFoundException
 	 * @throws InvalidClassException
 	 */
-	public static User readUser() throws FileNotFoundException, IOException, ClassNotFoundException, InvalidClassException {
-		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
+	public static User readUser(){
+		EntityManager entityManager = JPAHolder.getEntityManager();
 		User user = entityManager.find(User.class, GlobalUser.loggedUserId);
 		user.getLogs();
 		entityManager.close();
-		entityManagerFactory.close();
 		return user;
 	}
 	/**
@@ -186,67 +141,5 @@ public class User implements Serializable {
 
 	public void removeLog(int index) {
 		logs.remove(index);
-	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
-
-	public Date getBirthDate() {
-		return birthDate;
-	}
-
-	public void setBirthDate(Date birthDate) {
-		this.birthDate = birthDate;
-	}
-
-	public List<Log> getLogs() {
-		return logs;
-	}
-
-	public void setLogs(List<Log> logs) {
-		this.logs = logs;
-	}
-
-	public List<Workout> getWorkouts() {
-		return workouts;
-	}
-
-	public void setWorkouts(List<Workout> workouts) {
-		this.workouts = workouts;
-	}
-
-	public List<Diary> getDiaryList() {
-		return diaryList;
-	}
-
-	public void setDiaryList(List<Diary> diaryList) {
-		this.diaryList = diaryList;
-	}
-
-	@Override
-	public String toString() {
-		return "User [startDate=" + startDate + ", firstName=" + firstName + ", lastName=" + lastName + ", birthDate="
-				+ birthDate + ", logs=" + logs + "]";
 	}
 }

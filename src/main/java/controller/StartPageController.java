@@ -1,11 +1,10 @@
 package controller;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InvalidClassException;
+import java.io.*;
 import java.net.URL;
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
@@ -32,6 +31,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert.AlertType;
 import model.user.User;
+import org.hibernate.engine.jdbc.BlobProxy;
 
 /**
  * Klasa  - kontroler do obslugi okna Strony Głównej aplikacji
@@ -116,10 +116,14 @@ public class StartPageController implements Initializable {
 					avatar.setX(margin);
 					BufferedImage bi = SwingFXUtils.fromFXImage(image, null);
 					try{
-						File dir = new File("avatar.png");
-						ImageIO.write(bi, "png", dir);
+						ByteArrayOutputStream baos = new ByteArrayOutputStream();
+						ImageIO.write(bi, "png", baos);
+						Blob blFile = BlobProxy.generateProxy(baos.toByteArray());
+						User user = User.readUser();
+						user.setAvatar(blFile);
+						user.saveUser();
 						loadAvatar();
-					} catch(IOException | IllegalArgumentException e){
+					} catch(IOException e){
 						Alert alert = new Alert(AlertType.INFORMATION);
 						alert.setTitle("Informacja");
 						alert.setHeaderText("");
@@ -156,12 +160,14 @@ public class StartPageController implements Initializable {
 	 * Metoda laduajca avatar
 	 */
 	public void loadAvatar(){
-		File externalAvatar = new File("avatar.png");
-		Image avatarImage;
-		if(externalAvatar.exists())
-			avatarImage = new Image("file:avatar.png");
-		else
-			avatarImage = new Image(getClass().getResource("/images/avatar.png").toExternalForm());
+		User user = User.readUser();
+		InputStream avatarStream = null;
+		try {
+			avatarStream = user.getAvatar().getBinaryStream();
+		} catch (SQLException e) {
+			avatarStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("images/avatar.png");
+		}
+		Image avatarImage = new Image(avatarStream);
 		double margin = (avatar.getFitWidth() - avatarImage.getWidth()) / 2;
 		avatar.setImage(avatarImage);
 		avatar.setX(margin);

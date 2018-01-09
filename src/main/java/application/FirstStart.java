@@ -16,29 +16,18 @@ import javafx.stage.Stage;
 public class FirstStart {
 	Stage secondaryStage = new Stage();
 	/**
-	 * Metoda sprawdzajaca czy istenieje juz użytkownik
-	 * @return true jeżeli istnieje, false jeżeli nie istnieje
-	 */
-	public static boolean checkIfUserExist(){
-		boolean check = new File("user").isFile();
-		return check;
-	}
-	/**
 	 * Metoda tworząca scene
 	 * @throws IOException
 	 */
 	public void newUser() throws IOException{
-		if(checkIfUserExist() == false)
-		{
-			VBox root = (VBox)FXMLLoader.load(getClass().getResource("/FirstStart.fxml"));
-			Scene scene = new Scene(root,400,600);
+			VBox root = FXMLLoader.load(getClass().getResource("/FirstStart.fxml"));
+			Scene scene = new Scene(root,400,760);
 			scene.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
 			secondaryStage.setScene(scene);
 			secondaryStage.setResizable(false);
 			secondaryStage.setTitle("goGym - Rejestracja");
 			secondaryStage.getIcons().add(new Image((getClass().getResource("/images/icon.png").toExternalForm())));
 			secondaryStage.show();
-		}
 	}
 	public void closeWindow(){
 		secondaryStage.close();

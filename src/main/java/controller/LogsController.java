@@ -18,7 +18,7 @@ import model.user.Log;
 import model.user.User;
 /**
  * Klasa - kontroler modułu aplikacji do dodawania pomiarów ciała
- * @author Pawe�
+ * @author Paweł
  *
  */
 public class LogsController implements Initializable {
@@ -61,27 +61,19 @@ public class LogsController implements Initializable {
 			i++;
 		}
 		if (fail == false) {// jesli mozna dodac log
-			try {
-				User user = User.readUser();
-				Log log = new Log(logInFloat);
-				user.addLog(log);
-				user.saveUser();
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Dodałeś pomiary!");
-				alert.showAndWait();
-			} catch (IOException | ClassNotFoundException e) {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Błąd: " + e.toString());
-				alert.showAndWait();
-			}
+			User user = User.readUser();
+			Log log = new Log(logInFloat);
+			user.addLog(log);
+			user.saveUser();
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Informacja");
+			alert.setHeaderText("");
+			alert.setContentText("Dodałeś pomiary!");
+			alert.showAndWait();
 		}
 	}
 	/**
-	 * MEtoda inicjalizująca i tworząca widok do dodawania pomiarów
+	 * Metoda inicjalizująca i tworząca widok do dodawania pomiarów
 	 */
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {

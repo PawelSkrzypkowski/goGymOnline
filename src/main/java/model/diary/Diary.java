@@ -1,19 +1,16 @@
 package model.diary;
 
+import application.JPAHolder;
 import model.user.GlobalUser;
 import model.user.User;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InvalidClassException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 /**
@@ -27,12 +24,17 @@ public class Diary implements Serializable {
 	@Id
 	@GeneratedValue
 	private Long id;
+
 	@Column
 	private Date startDate;
+
 	@Column
 	private Date finishDate;
+
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<ExercisesDone> exercisesDone;
+
 	@Column
 	private Integer restTime;//seconds
 	/**
@@ -41,13 +43,11 @@ public class Diary implements Serializable {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	public static LinkedList<Diary> downloadDiaries() throws ClassNotFoundException, IOException {
-		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
+	public static LinkedList<Diary> downloadDiaries(){
+		EntityManager entityManager = JPAHolder.getEntityManager();
 		User user = entityManager.find(User.class, GlobalUser.loggedUserId);
 		LinkedList<Diary> list = new LinkedList<>(user.getDiaryList());
 		entityManager.close();
-		entityManagerFactory.close();
 		return list;
 	}
 	/**
@@ -263,13 +263,17 @@ public class Diary implements Serializable {
 	 * @throws IOException
 	 */
 	public void saveDiary(){
-		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		EntityManager entityManager = JPAHolder.getEntityManager();
+		User user = entityManager.find(User.class, GlobalUser.loggedUserId);
 		entityManager.getTransaction().begin();
-		entityManager.merge(this);
+		if(this.id == null) {
+			user.getDiaryList().add(this);
+			entityManager.merge(user);
+		} else{
+			entityManager.merge(this);
+		}
 		entityManager.getTransaction().commit();
 		entityManager.close();
-		entityManagerFactory.close();
 	}
 	/**
 	 * Metoda odczytująca wybrany trening
@@ -282,19 +286,17 @@ public class Diary implements Serializable {
 	 */
 	public static Diary readDiary(String fileName){
 		SimpleDateFormat sdf2 = new SimpleDateFormat("dd-MM-yyyy HH-mm-ss");
-		try {
-			Date date = sdf2.parse(fileName);
-			EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("myDatabase");
-			EntityManager entityManager = entityManagerFactory.createEntityManager();
-			TypedQuery<Diary> query = entityManager.createQuery("SELECT d FROM Diary d WHERE d.startDate=:date", Diary.class);
-			query.setParameter("date", date);
-			Diary diary = query.getSingleResult();
-			entityManager.close();
-			entityManagerFactory.close();
-			return diary;
-		} catch (ParseException e) {
-			return null;
+		EntityManager entityManager = JPAHolder.getEntityManager();
+		User user = entityManager.find(User.class, GlobalUser.loggedUserId);
+		Diary diary = null;
+		for(Diary d : user.getDiaryList()) {
+			if(sdf2.format(d.getStartDate()).equals(fileName)) {
+				diary = d;
+				break;
+			}
 		}
+		entityManager.close();
+		return diary;
 	}
 	public Date getStartDate() {
 		return startDate;

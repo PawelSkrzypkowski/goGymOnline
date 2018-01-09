@@ -1,19 +1,18 @@
 package model.diary;
 
-import model.diary.Exercise;
+import application.JPAHolder;
+import model.user.GlobalUser;
+import model.user.User;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InvalidClassException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 /**
@@ -26,21 +25,35 @@ public class Workout implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue
+	@Column(name = "id_workout")
 	private Long id;
+
 	@Column
 	private String workoutName;
-	@OneToMany
+
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@ManyToMany
+	@JoinTable(name = "workout_exercise",
+			joinColumns = {@JoinColumn(name="workout_id", referencedColumnName="id_workout")},
+			inverseJoinColumns = {@JoinColumn(name="exercise_id", referencedColumnName="id_exercise")}
+	)
 	private List<Exercise> exercises;
+
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@ElementCollection
-	@OrderColumn
 	private List<Integer> setsNumber;
+
 	@ElementCollection
-	@OrderColumn
+	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<Integer> rest;
+
 	@Column
+	@Type(type = "text")
 	private String workoutDescription;
+
 	@Column
 	private String workoutType;
+
 	@Column
 	private String difficultyLevel;
 
@@ -109,14 +122,27 @@ public class Workout implements Serializable {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public void saveWorkout() throws FileNotFoundException, IOException {
-		new File("workouts/").mkdir();
-		ObjectOutputStream file = null;
-		file = new ObjectOutputStream(new FileOutputStream("workouts/" + workoutName));
-		file.writeObject(this);
-		file.flush();
-		if (file != null)
-			file.close();
+	public void saveWorkout(){
+		EntityManager entityManager = JPAHolder.getEntityManager();
+		entityManager.getTransaction().begin();
+		if(this.id == null) {
+			User user = entityManager.find(User.class, GlobalUser.loggedUserId);
+			user.getWorkouts().add(this);
+			entityManager.merge(user);
+		} else{
+			List<Integer> rest = this.rest;
+			List<Integer> sets = this.setsNumber;
+			this.rest = new ArrayList<>();
+			this.setsNumber = new ArrayList<>();
+			entityManager.merge(this);
+			this.rest = rest;
+			this.setsNumber = sets;
+			System.out.println("Rest - tabela: " + rest);
+			System.out.println(sets);
+			entityManager.merge(this);
+		}
+		entityManager.getTransaction().commit();
+		entityManager.close();
 	}
 	/**
 	 * Metoda odczytująca trening
@@ -127,19 +153,17 @@ public class Workout implements Serializable {
 	 * @throws ClassNotFoundException
 	 * @throws InvalidClassException
 	 */
-	public static Workout readWorkout(String fileName) throws FileNotFoundException, IOException, ClassNotFoundException, InvalidClassException {
-		ObjectInputStream file = null;
+	public static Workout readWorkout(String fileName){
+		EntityManager entityManager = JPAHolder.getEntityManager();
+		User user = entityManager.find(User.class, GlobalUser.loggedUserId);
 		Workout workout = null;
-		new File("workouts/").mkdir();
-		if(new File("workouts/" + fileName).exists() == true)
-		file = new ObjectInputStream(new FileInputStream("workouts/" + fileName));
-		if(file ==null){
-			return workout;
+		for(Workout work : user.getWorkouts()) {
+			if(work.getWorkoutName().equals(fileName)) {
+				workout = work;
+				break;
+			}
 		}
-		workout = (Workout) file.readObject();
-		if (file != null) {
-			file.close();
-		}
+		entityManager.close();
 		return workout;
 	}
 	/**
@@ -151,7 +175,7 @@ public class Workout implements Serializable {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public void changeWorkoutProperties(String name, String description, String type, String level) throws FileNotFoundException, IOException{
+	public void changeWorkoutProperties(String name, String description, String type, String level){
 		if(!getWorkoutDescription().equals(description))
 			setWorkoutDescription(description);
 		if(!getWorkoutType().equals(type))
@@ -182,8 +206,12 @@ public class Workout implements Serializable {
 	 * Metoda usuwająca trening
 	 * @throws IOException
 	 */
-	public void deleteWorkout() throws IOException {
-			Files.delete(Paths.get("workouts/" + getWorkoutName()));
+	public void deleteWorkout(){
+		EntityManager entityManager = JPAHolder.getEntityManager();
+		entityManager.getTransaction().begin();
+		entityManager.remove(this);
+		entityManager.getTransaction().commit();
+		entityManager.close();
 	}
 	/**
 	 * Metoda zmieniajaca wybrane cwiczenie
@@ -194,7 +222,7 @@ public class Workout implements Serializable {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public void editExercise(int index, Exercise exercise, int setsNumber, int rest) throws FileNotFoundException, IOException {
+	public void editExercise(int index, Exercise exercise, int setsNumber, int rest){
 		getExercises().set(index, exercise);
 		getSetsNumber().set(index, setsNumber);
 		getRest().set(index, rest);
@@ -206,7 +234,7 @@ public class Workout implements Serializable {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public void moveUpExercise(int index) throws FileNotFoundException, IOException {
+	public void moveUpExercise(int index){
 		Exercise tempExercise = getExercises().get(index);
 		Integer tempSetsNumber = getSetsNumber().get(index);
 		Integer tempRest = getRest().get(index);
@@ -219,7 +247,7 @@ public class Workout implements Serializable {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public void moveDownExercise(int index) throws FileNotFoundException, IOException {
+	public void moveDownExercise(int index){
 		Exercise tempExercise = getExercises().get(index);
 		Integer tempSetsNumber = getSetsNumber().get(index);
 		Integer tempRest = getRest().get(index);
@@ -258,7 +286,7 @@ public class Workout implements Serializable {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public void addItemAtTheEnd(Exercise exercise, Integer setsNumber, Integer rest) throws FileNotFoundException, IOException {
+	public void addItemAtTheEnd(Exercise exercise, Integer setsNumber, Integer rest) {
 		this.exercises.add(exercise);
 		this.setsNumber.add(setsNumber);
 		this.rest.add(rest);
@@ -272,7 +300,7 @@ public class Workout implements Serializable {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public void addItemAtTheBeginning(Exercise exercise, Integer setsNumber, Integer rest) throws FileNotFoundException, IOException {
+	public void addItemAtTheBeginning(Exercise exercise, Integer setsNumber, Integer rest) {
 		this.exercises.add(0, exercise);
 		this.setsNumber.add(0, setsNumber);
 		this.rest.add(0, rest);
@@ -287,7 +315,7 @@ public class Workout implements Serializable {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public void addItemAfter(Exercise exercise, Integer setsNumber, Integer rest, int index) throws FileNotFoundException, IOException {
+	public void addItemAfter(Exercise exercise, Integer setsNumber, Integer rest, int index) {
 		this.exercises.add(index, exercise);
 		this.setsNumber.add(index, setsNumber);
 		this.rest.add(index, rest);
@@ -299,7 +327,7 @@ public class Workout implements Serializable {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public void deleteItem(int index) throws FileNotFoundException, IOException{
+	public void deleteItem(int index) {
 		this.exercises.remove(index);
 		this.setsNumber.remove(index);
 		this.rest.remove(index);

@@ -1,34 +1,41 @@
 package controller;
 
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import application.CreateExercises;
+import application.JPAHolder;
+import com.google.common.io.ByteStreams;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.user.Log;
 import model.user.User;
+import org.hibernate.engine.jdbc.BlobProxy;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 
 /**
- * Klasa - kontroler rejestracji nowego u�ytkownika
- * @author Pawe�
+ * Klasa - kontroler rejestracji nowego użytkownika
+ * @author Paweł
  *
  */
 public class FirstStartController implements Initializable {
@@ -40,6 +47,10 @@ public class FirstStartController implements Initializable {
 	private ComboBox<String> birthMonth;
 	@FXML
 	private ComboBox<Integer> birthYear;
+	@FXML
+	private TextField login;
+	@FXML
+	private PasswordField password;
 	@FXML
 	private TextField setFirstName;
 	@FXML
@@ -101,7 +112,7 @@ public class FirstStartController implements Initializable {
 			}
 			i++;
 		}
-		if (setFirstName.getText().isEmpty() == true || setLastName.getText().isEmpty() == true
+		if (login.getText().isEmpty() == true || password.getText().isEmpty() == true || setFirstName.getText().isEmpty() == true || setLastName.getText().isEmpty() == true
 				|| birthDay.getValue() == null || birthMonth.getValue() == null || birthYear.getValue() == null) {
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Informacja");
@@ -110,10 +121,41 @@ public class FirstStartController implements Initializable {
 			alert.showAndWait();
 			fail = true;
 		}
+		if (login.getText().length() < 6 || password.getText().length() < 6) {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Informacja");
+			alert.setHeaderText("");
+			alert.setContentText("Login i hasło muszą mieć przynajmniej 6 znaków");
+			alert.showAndWait();
+			fail = true;
+			password.clear();
+		}
+		EntityManager entityManager = JPAHolder.getEntityManager();
+		TypedQuery<User> query = entityManager.createQuery("select u from User u where u.login=:login", User.class);
+		query.setParameter("login", login.getText());
+		try{
+			query.getSingleResult();
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Informacja");
+			alert.setHeaderText("");
+			alert.setContentText("Użytkownik o podanym loginie już istnieje!");
+			alert.showAndWait();
+			fail = true;
+			password.clear();
+		} catch (NoResultException e){}//brak uzytkownika o podanym loginie
+
 		if (fail == false) {// jesli mozna zarejestrować
 			try {
 				Date birthDate = changeToDateType(birthDay.getValue(), birthMonth.getValue(), birthYear.getValue());
-				User user = new User(setFirstName.getText(), setLastName.getText(), birthDate);
+				MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+				byte[] hash = messageDigest.digest(password.getText().getBytes(StandardCharsets.UTF_8));
+				String encode = Base64.getEncoder().encodeToString(hash);
+				ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+				InputStream defaultImage = classloader.getResourceAsStream("images/avatar.png");
+				byte[] data = ByteStreams.toByteArray(defaultImage);
+				User user = User.builder().firstName(setFirstName.getText()).lastName(setLastName.getText()).
+						birthDate(birthDate).login(login.getText()).password(encode).
+						avatar(BlobProxy.generateProxy(data)).logs(new ArrayList<>()).build();
 				Log log = new Log(logInFloat);
 				user.addLog(log);
 				user.saveUser();
@@ -133,6 +175,18 @@ public class FirstStartController implements Initializable {
 				alert.setTitle("Informacja");
 				alert.setHeaderText("");
 				alert.setContentText("Błąd: niepoprawna data");
+				alert.showAndWait();
+			} catch (NoSuchAlgorithmException e) {
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Informacja");
+				alert.setHeaderText("");
+				alert.setContentText("Błąd algorytmu hashującego");
+				alert.showAndWait();
+			} catch (IOException e) {
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Informacja");
+				alert.setHeaderText("");
+				alert.setContentText("Nie udany zapis podstawowego avatara");
 				alert.showAndWait();
 			}
 		}
@@ -198,6 +252,10 @@ public class FirstStartController implements Initializable {
 		birthMonth.setItems(monthOptions);
 		for (int i = 1920; i <= Calendar.getInstance().get(Calendar.YEAR); i++)
 			birthYear.getItems().add(i);
+		login.textProperty().addListener((observable, oldValue, newValue) -> {
+			if (checkNameCorrectness(login.getText()) == false)
+				login.setText(oldValue);
+		});
 		setFirstName.textProperty().addListener((observable, oldValue, newValue) -> {
 			if (checkNameCorrectness(setFirstName.getText()) == false)
 				setFirstName.setText(oldValue);

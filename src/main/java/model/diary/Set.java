@@ -1,5 +1,8 @@
 package model.diary;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -15,12 +18,15 @@ public class Set implements Serializable{
 	@Id
 	@GeneratedValue
 	private Long id;
+
 	@Column
 	private Integer reps;
+
 	@Column
 	private Boolean dropSet;
+
+	@LazyCollection(LazyCollectionOption.FALSE)
 	@ElementCollection
-	@OrderColumn
 	private List<Double> weight;
 
 

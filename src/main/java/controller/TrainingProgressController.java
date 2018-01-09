@@ -33,7 +33,7 @@ import model.user.User;
 
 /**
  * Klasa - kontroler obsługujący sekcję do przeglądania postępów treningowych
- * @author Pawe�
+ * @author Paweł
  *
  */
 public class TrainingProgressController {
@@ -92,7 +92,7 @@ public class TrainingProgressController {
 			Float min = (float) 999;
 			for(Entry<Date, Float> entry : tm.entrySet()){
 				SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-				series.getData().add(new XYChart.Data<String, Number>(sdf.format(entry.getKey()), entry.getValue()));
+				series.getData().add(new XYChart.Data<>(sdf.format(entry.getKey()), entry.getValue()));
 				if(max < entry.getValue())
 					max = entry.getValue();
 				if(min > entry.getValue())
@@ -103,7 +103,7 @@ public class TrainingProgressController {
 			Label recordMin = new Label("Najmniejsza wartość: " + min.toString()), recordMax = new Label("Największa wartość: " + max.toString());
 			mainPage.getChildren().addAll(chart, recordMin, recordMax);
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException | ClassNotFoundException | IOException e) {
+				| InvocationTargetException e) {
 			Alert alert = new Alert(AlertType.INFORMATION);
 			alert.setTitle("Informacja");
 			alert.setHeaderText("");
@@ -150,8 +150,7 @@ public class TrainingProgressController {
 	 * @param fileName
 	 */
 	public void showTrainingSummary(VBox mainPage, String fileName) {
-		Diary diary = null;
-		diary = Diary.readDiary(fileName);
+		Diary diary = Diary.readDiary(fileName);
 		mainPage.getChildren().clear();
 		SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 		Label summary = new Label("Podsumowanie treningu z dnia " + format.format(diary.getStartDate()));
@@ -247,27 +246,18 @@ public class TrainingProgressController {
 		mainPage.getChildren().addAll(trainingsSummaries, showExercisesSummaries, showMonthByMonthSummaries, showMeansurmentsSummaries);
 		trainingsSummaries.setOnAction((event) -> {
 			mainPage.getChildren().clear();
-			try {
-				LinkedList<Diary> list = Diary.downloadDiaries();
-				SortedSet<Date> set = new TreeSet<Date>(Collections.reverseOrder());
-				for(Diary d : list)
-					set.add(d.getStartDate());
-				for(Date date : set){
-					SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-					Button button = new Button("Trening z dnia: " + sdf.format(date));
-					mainPage.getChildren().add(button);
-					button.setOnAction((event2) -> {
-						SimpleDateFormat sdf2 = new SimpleDateFormat("dd-MM-yyyy HH-mm-ss");
-						showTrainingSummary(mainPage, sdf2.format(date));
-					});
-				}
-			} catch (ClassNotFoundException | IOException e) {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Błąd: " + e.toString()
-						+ ". Błąd odczytu pliku.");
-				alert.showAndWait();
+			LinkedList<Diary> list = Diary.downloadDiaries();
+			SortedSet<Date> set = new TreeSet<Date>(Collections.reverseOrder());
+			for(Diary d : list)
+				set.add(d.getStartDate());
+			for(Date date : set){
+				SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+				Button button = new Button("Trening z dnia: " + sdf.format(date));
+				mainPage.getChildren().add(button);
+				button.setOnAction((event2) -> {
+					SimpleDateFormat sdf2 = new SimpleDateFormat("dd-MM-yyyy HH-mm-ss");
+					showTrainingSummary(mainPage, sdf2.format(date));
+				});
 			}
 		});
 		showExercisesSummaries.setOnAction((event) -> {
