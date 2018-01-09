@@ -1,6 +1,8 @@
 package model.diary;
 
 import application.JPAHolder;
+import lombok.Data;
+import model.diary.utility.WorkoutUtility;
 import model.user.GlobalUser;
 import model.user.User;
 import org.hibernate.annotations.LazyCollection;
@@ -10,7 +12,6 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InvalidClassException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -21,6 +22,7 @@ import java.util.List;
  *
  */
 @Entity
+@Data
 public class Workout implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@Id
@@ -57,66 +59,6 @@ public class Workout implements Serializable {
 	@Column
 	private String difficultyLevel;
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((difficultyLevel == null) ? 0 : difficultyLevel.hashCode());
-		result = prime * result + ((exercises == null) ? 0 : exercises.hashCode());
-		result = prime * result + ((rest == null) ? 0 : rest.hashCode());
-		result = prime * result + ((setsNumber == null) ? 0 : setsNumber.hashCode());
-		result = prime * result + ((workoutDescription == null) ? 0 : workoutDescription.hashCode());
-		result = prime * result + ((workoutName == null) ? 0 : workoutName.hashCode());
-		result = prime * result + ((workoutType == null) ? 0 : workoutType.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Workout other = (Workout) obj;
-		if (difficultyLevel == null) {
-			if (other.difficultyLevel != null)
-				return false;
-		} else if (!difficultyLevel.equals(other.difficultyLevel))
-			return false;
-		if (exercises == null) {
-			if (other.exercises != null)
-				return false;
-		} else if (!exercises.equals(other.exercises))
-			return false;
-		if (rest == null) {
-			if (other.rest != null)
-				return false;
-		} else if (!rest.equals(other.rest))
-			return false;
-		if (setsNumber == null) {
-			if (other.setsNumber != null)
-				return false;
-		} else if (!setsNumber.equals(other.setsNumber))
-			return false;
-		if (workoutDescription == null) {
-			if (other.workoutDescription != null)
-				return false;
-		} else if (!workoutDescription.equals(other.workoutDescription))
-			return false;
-		if (workoutName == null) {
-			if (other.workoutName != null)
-				return false;
-		} else if (!workoutName.equals(other.workoutName))
-			return false;
-		if (workoutType == null) {
-			if (other.workoutType != null)
-				return false;
-		} else if (!workoutType.equals(other.workoutType))
-			return false;
-		return true;
-	}
 	/**
 	 * Metoda zapisujaca trening
 	 * @throws FileNotFoundException
@@ -144,28 +86,7 @@ public class Workout implements Serializable {
 		entityManager.getTransaction().commit();
 		entityManager.close();
 	}
-	/**
-	 * Metoda odczytująca trening
-	 * @param fileName
-	 * @return
-	 * @throws FileNotFoundException
-	 * @throws IOException
-	 * @throws ClassNotFoundException
-	 * @throws InvalidClassException
-	 */
-	public static Workout readWorkout(String fileName){
-		EntityManager entityManager = JPAHolder.getEntityManager();
-		User user = entityManager.find(User.class, GlobalUser.loggedUserId);
-		Workout workout = null;
-		for(Workout work : user.getWorkouts()) {
-			if(work.getWorkoutName().equals(fileName)) {
-				workout = work;
-				break;
-			}
-		}
-		entityManager.close();
-		return workout;
-	}
+
 	/**
 	 * Metoda zmieniająca elementy opisowe treningu
 	 * @param name
@@ -192,13 +113,11 @@ public class Workout implements Serializable {
 	 * Metoda sprawdzajaca czy istnieje juz trening i czy nie zostanie nadpisany
 	 * @param name
 	 * @return
-	 * @throws ClassNotFoundException
-	 * @throws IOException
 	 */
-	public boolean checkIfWorkoutExist(String name) throws ClassNotFoundException, IOException{//sprawdza czy po zmianie nazwy nie zostanie nadpisany inny plan
+	public boolean checkIfWorkoutExist(String name){//sprawdza czy po zmianie nazwy nie zostanie nadpisany inny plan
 		if(name.equals(getWorkoutName()))//jesli nazwa nie zostala zmieniona
 			return false;
-		if(Workout.readWorkout(name) == null)
+		if(WorkoutUtility.readWorkout(name) == null)
 			return false;
 		return true;
 	}
@@ -333,69 +252,4 @@ public class Workout implements Serializable {
 		this.rest.remove(index);
 		saveWorkout();
 	}
-
-	public String getWorkoutName() {
-		return workoutName;
-	}
-
-	public void setWorkoutName(String workoutName) {
-		this.workoutName = workoutName;
-	}
-
-	public List<Exercise> getExercises() {
-		return exercises;
-	}
-
-	public void setExercises(List<Exercise> exercises) {
-		this.exercises = exercises;
-	}
-
-	public List<Integer> getSetsNumber() {
-		return setsNumber;
-	}
-
-	public void setSetsNumber(List<Integer> setsNumber) {
-		this.setsNumber = setsNumber;
-	}
-
-	public List<Integer> getRest() {
-		return rest;
-	}
-
-	public void setRest(List<Integer> rest) {
-		this.rest = rest;
-	}
-
-	public String getWorkoutDescription() {
-		return workoutDescription;
-	}
-
-	public void setWorkoutDescription(String workoutDescription) {
-		this.workoutDescription = workoutDescription;
-	}
-
-	public String getWorkoutType() {
-		return workoutType;
-	}
-
-	public void setWorkoutType(String workoutType) {
-		this.workoutType = workoutType;
-	}
-
-	public String getDifficultyLevel() {
-		return difficultyLevel;
-	}
-
-	public void setDifficultyLevel(String difficultyLevel) {
-		this.difficultyLevel = difficultyLevel;
-	}
-
-	@Override
-	public String toString() {
-		return "Workout [workoutName=" + workoutName + ", exercises=" + exercises + ", setsNumber=" + setsNumber
-				+ ", rest=" + rest + ", workoutDescription=" + workoutDescription + ", workoutType=" + workoutType
-				+ ", difficultyLevel=" + difficultyLevel + "]";
-	}
-
-
 }

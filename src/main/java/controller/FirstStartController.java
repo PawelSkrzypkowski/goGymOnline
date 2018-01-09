@@ -16,6 +16,9 @@ import java.util.regex.Pattern;
 import application.CreateExercises;
 import application.JPAHolder;
 import com.google.common.io.ByteStreams;
+import controller.utility.AlertUtility;
+import controller.utility.FirstStartControllerUtility;
+import controller.utility.LogsControllerUtility;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -59,74 +62,29 @@ public class FirstStartController implements Initializable {
 	private TextField setWeight, setNeck, setChest, setBiceps, setWaist, setStomach, setHips, setThigh, setCalf;
 	@FXML
 	private Button createUser;
-	ObservableList<Integer> dayOptions = FXCollections.observableArrayList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
-			14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31);
-	private static ObservableList<String> monthOptions = FXCollections.observableArrayList("Styczeń", "Luty", "Marzec", "Kwiecień",
-			"Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień");
 
-	public static ObservableList<String> getMonthOptions() {
-		return monthOptions;
-	}
-
-	public boolean checkNameCorrectness(String name) {
-		Pattern pattern = Pattern.compile("[^A-Za-z0-9żźćńółęąśŻŹĆĄŚĘŁÓŃ -]");
-		Matcher matcher = pattern.matcher(name);
-		if (matcher.find() == true)// jesli zostal odnaleziony znak spoza
-									// zakresu a-z i A-Z -, czyli niepoprawny
-			return false;
-		return true;
-	}
-
-	public boolean checkFloatCorrectness(String number) {
-		Pattern pattern = Pattern.compile("[^0-9,.]");
-		Matcher matcher = pattern.matcher(number);
-		if (matcher.find() == true)// jesli zostal odnaleziony znak spoza
-									// zakresu 0-9 , .
-			return false;
-		return true;
-	}
 	/**
 	 * Metoda przechwytujaca tworzenie nowego uzytkownika
 	 * @param event
 	 */
 	public void handleCreateUser(ActionEvent event) {
-		Float[] logInFloat = new Float[9];
-		int i = 0;
+		Float[] logInFloat = null;
 		boolean fail = false;
 		TextField[] logTable = { setWeight, setNeck, setChest, setBiceps, setWaist, setStomach, setHips, setThigh,
 				setCalf };
-		for (TextField field : logTable) {
-			field.setText(field.getText().replace(',', '.'));
-			if (field.getText().isEmpty() == true)
-				field.setText("0");
-			try {
-				logInFloat[i] = Float.parseFloat(field.getText());
-			} catch (NumberFormatException e){// jesli zly format liczby
-				fail = true;
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Wprowadzona wartość nie jest liczbą");
-				alert.showAndWait();
-				break;
-			}
-			i++;
+		try{
+			logInFloat = LogsControllerUtility.textFieldArrayToFloatArray(logTable);
+		} catch (NumberFormatException e){// jesli zly format liczby
+			fail = true;
+			AlertUtility.noNumberValue();
 		}
 		if (login.getText().isEmpty() == true || password.getText().isEmpty() == true || setFirstName.getText().isEmpty() == true || setLastName.getText().isEmpty() == true
 				|| birthDay.getValue() == null || birthMonth.getValue() == null || birthYear.getValue() == null) {
-			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Informacja");
-			alert.setHeaderText("");
-			alert.setContentText("Nie podałeś wymaganych danych");
-			alert.showAndWait();
+			AlertUtility.noRequiredData();
 			fail = true;
 		}
 		if (login.getText().length() < 6 || password.getText().length() < 6) {
-			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Informacja");
-			alert.setHeaderText("");
-			alert.setContentText("Login i hasło muszą mieć przynajmniej 6 znaków");
-			alert.showAndWait();
+			AlertUtility.toShortCredentials();
 			fail = true;
 			password.clear();
 		}
@@ -135,18 +93,14 @@ public class FirstStartController implements Initializable {
 		query.setParameter("login", login.getText());
 		try{
 			query.getSingleResult();
-			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Informacja");
-			alert.setHeaderText("");
-			alert.setContentText("Użytkownik o podanym loginie już istnieje!");
-			alert.showAndWait();
+			AlertUtility.loginExists();
 			fail = true;
 			password.clear();
 		} catch (NoResultException e){}//brak uzytkownika o podanym loginie
 
 		if (fail == false) {// jesli mozna zarejestrować
 			try {
-				Date birthDate = changeToDateType(birthDay.getValue(), birthMonth.getValue(), birthYear.getValue());
+				Date birthDate = FirstStartControllerUtility.changeToDateType(birthDay.getValue(), birthMonth.getValue(), birthYear.getValue());
 				MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
 				byte[] hash = messageDigest.digest(password.getText().getBytes(StandardCharsets.UTF_8));
 				String encode = Base64.getEncoder().encodeToString(hash);
@@ -159,11 +113,7 @@ public class FirstStartController implements Initializable {
 				Log log = new Log(logInFloat);
 				user.addLog(log);
 				user.saveUser();
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Zostaleś zarejestrowany!");
-				alert.showAndWait();
+				AlertUtility.registered();
 				Stage stage = (Stage) vb.getScene().getWindow();// zamykanie
 																// okna
 																// rejestracji
@@ -171,97 +121,33 @@ public class FirstStartController implements Initializable {
 				CreateExercises start = new CreateExercises();
 				start.start();
 			} catch (ParseException e) {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Błąd: niepoprawna data");
-				alert.showAndWait();
+				AlertUtility.dateError();
 			} catch (NoSuchAlgorithmException e) {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Błąd algorytmu hashującego");
-				alert.showAndWait();
+				AlertUtility.hashAlgorithmError();
 			} catch (IOException e) {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Nie udany zapis podstawowego avatara");
-				alert.showAndWait();
+				AlertUtility.basicAvatarSaveError();
 			}
 		}
 	}
-	/**
-	 * Metoda zmieniająca polską datę na datę w formacie Javowym
-	 * @param day
-	 * @param month
-	 * @param year
-	 * @return
-	 * @throws ParseException
-	 */
-	public Date changeToDateType(Integer day, String month, Integer year) throws ParseException {
-		switch (month) {
-		case "Styczeń":
-			month = "01";
-			break;
-		case "Luty":
-			month = "02";
-			break;
-		case "Marzec":
-			month = "03";
-			break;
-		case "Kwiecień":
-			month = "04";
-			break;
-		case "Maj":
-			month = "05";
-			break;
-		case "Czerwiec":
-			month = "06";
-			break;
-		case "Lipiec":
-			month = "07";
-			break;
-		case "Sierpień":
-			month = "08";
-			break;
-		case "Wrzesień":
-			month = "09";
-			break;
-		case "Październik":
-			month = "10";
-			break;
-		case "Listopad":
-			month = "11";
-			break;
-		case "Grudzień":
-			month = "12";
-			break;
-		default:
-			month = "1";
-		}
-		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-		format.setLenient(false);
-		return format.parse(day.toString() + "-" + month + "-" + year.toString());
-	}
+
 	/**
 	 * Metoda inicjalizująca, tworząca widok okna oraz listenery
 	 */
 	public void initialize(URL url, ResourceBundle rb) {
-		birthDay.setItems(dayOptions);
-		birthMonth.setItems(monthOptions);
+		birthDay.setItems(FirstStartControllerUtility.getDayOptions());
+		birthMonth.setItems(FirstStartControllerUtility.getMonthOptions());
 		for (int i = 1920; i <= Calendar.getInstance().get(Calendar.YEAR); i++)
 			birthYear.getItems().add(i);
 		login.textProperty().addListener((observable, oldValue, newValue) -> {
-			if (checkNameCorrectness(login.getText()) == false)
+			if (FirstStartControllerUtility.checkNameCorrectness(login.getText()) == false)
 				login.setText(oldValue);
 		});
 		setFirstName.textProperty().addListener((observable, oldValue, newValue) -> {
-			if (checkNameCorrectness(setFirstName.getText()) == false)
+			if (FirstStartControllerUtility.checkNameCorrectness(setFirstName.getText()) == false)
 				setFirstName.setText(oldValue);
 		});
 		setLastName.textProperty().addListener((observable, oldValue, newValue) -> {
-			if (checkNameCorrectness(setLastName.getText()) == false)
+			if (FirstStartControllerUtility.checkNameCorrectness(setLastName.getText()) == false)
 				setLastName.setText(oldValue);
 		});
 		TextField[] logTable = { setWeight, setNeck, setChest, setBiceps, setWaist, setStomach, setHips, setThigh,
@@ -269,7 +155,7 @@ public class FirstStartController implements Initializable {
 		for (TextField field : logTable) {// sprawdzam dla kazdej pozycji z logs
 											// czy znajduja sie prawidlowe znaki
 			field.textProperty().addListener((observable, oldValue, newValue) -> {
-				if (checkFloatCorrectness(field.getText()) == false)
+				if (FirstStartControllerUtility.checkFloatCorrectness(field.getText()) == false)
 					field.setText(oldValue);
 			});
 		}

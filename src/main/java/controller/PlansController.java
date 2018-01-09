@@ -10,6 +10,8 @@ import java.util.regex.Pattern;
 
 
 import application.JPAHolder;
+import controller.utility.AlertUtility;
+import controller.utility.PlansControllerUtility;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -35,11 +37,11 @@ import model.diary.Exercise;
 import model.diary.ExercisesDone;
 import model.diary.Set;
 import model.diary.Workout;
+import model.diary.utility.ExerciseUtility;
 import model.user.GlobalUser;
 import model.user.User;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 /**
  * Klasa - kontroler do obslugi planow treningowych
@@ -64,27 +66,6 @@ public class PlansController {
 		entityManager.close();
 	}
 
-	public boolean checkIntegerCorrectness(String number) {
-		Pattern pattern = Pattern.compile("[^0-9]");
-		Matcher matcher = pattern.matcher(number);
-		if (matcher.find() == true || number.length() == 0)// jesli zostal
-															// odnaleziony znak
-															// spoza
-			// zakresu 0-9
-			return false;
-		return true;
-	}
-
-	public boolean checkStringCorrectness(String name) {
-		Pattern pattern = Pattern.compile("[^A-Za-z0-9żźćńółęąśŻŹĆĄŚĘŁÓŃs\\s\\-,]");
-		Matcher matcher = pattern.matcher(name);
-		if (matcher.find() == true || name.length() == 0)// jesli zostal
-															// odnaleziony znak
-															// spoza
-			// zakresu a-z i A-Z -, czyli niepoprawny lub pusty
-			return false;
-		return true;
-	}
 	/**
 	 * Metoda zapewniajaca wyglad do edycji cwiczenia
 	 * @param exercise
@@ -153,20 +134,10 @@ public class PlansController {
 	public void saveEdittedExercise(Workout workout, String exerciseName, String setsNumber, String rest, int i) {
 		Exercise ex;
 		try {
-			ex = Exercise.readExercise(exerciseName);
-				workout.editExercise(i, ex, Integer.parseInt(setsNumber), Integer.parseInt(rest));
-		} catch (ClassNotFoundException | IOException e) {
-			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Informacja");
-			alert.setHeaderText("");
-			alert.setContentText("Błąd: " + e.toString());
-			alert.showAndWait();
+			ex = ExerciseUtility.readExercise(exerciseName);
+			workout.editExercise(i, ex, Integer.parseInt(setsNumber), Integer.parseInt(rest));
 		} catch(NumberFormatException e) {
-			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Informacja");
-			alert.setHeaderText("");
-			alert.setContentText("Podales niepoprawne dane!");
-			alert.showAndWait();
+			AlertUtility.badData();
 		}
 	}
 	/**
@@ -178,16 +149,8 @@ public class PlansController {
 	 */
 	public void saveNewExercise(Workout workout, String exerciseName, String setsNumber, String rest) {
 		Exercise ex;
-		try {
-			ex = Exercise.readExercise(exerciseName);
-			workout.addItemAtTheEnd(ex, Integer.parseInt(setsNumber), Integer.parseInt(rest));
-		} catch(NumberFormatException | ClassNotFoundException | IOException e){
-			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Informacja");
-			alert.setHeaderText("");
-			alert.setContentText("Podales niepoprawne dane!");
-			alert.showAndWait();
-		}
+		ex = ExerciseUtility.readExercise(exerciseName);
+		workout.addItemAtTheEnd(ex, Integer.parseInt(setsNumber), Integer.parseInt(rest));
 
 	}
 	/**
@@ -228,33 +191,17 @@ public class PlansController {
 		mainPage.getChildren().addAll(name, editName, description, editDescription, type, editType, level, editLevel,
 				save, header);
 		save.setOnAction((event) -> {
-			try {
-				if (checkStringCorrectness(editName.getText()) == false
-						|| checkStringCorrectness(editDescription.getText()) == false
-						|| checkStringCorrectness(editType.getText()) == false
-						|| checkStringCorrectness(editLevel.getText()) == false) {
-					Alert alert = new Alert(AlertType.INFORMATION);
-					alert.setTitle("Informacja");
-					alert.setHeaderText("");
-					alert.setContentText("Możesz korzystać tylko z liter, cyfr i znaku -");
-					alert.showAndWait();
-				} else if (workout.checkIfWorkoutExist(editName.getText())) {
-					Alert alert = new Alert(AlertType.INFORMATION);
-					alert.setTitle("Informacja");
-					alert.setHeaderText("");
-					alert.setContentText("Podana nazwa juz jest zajęta");
-					alert.showAndWait();
-				} else {
-					workout.changeWorkoutProperties(editName.getText(), editDescription.getText(), editType.getText(),
-							editLevel.getText());
-					editWorkout(workout, mainPage);
-				}
-			} catch (ClassNotFoundException | IOException e) {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Uszkodzony lub brak pliku treningowego!");
-				alert.showAndWait();
+			if (!PlansControllerUtility.checkStringCorrectness(editName.getText())
+					|| !PlansControllerUtility.checkStringCorrectness(editDescription.getText())
+					|| !PlansControllerUtility.checkStringCorrectness(editType.getText())
+					|| !PlansControllerUtility.checkStringCorrectness(editLevel.getText())) {
+				AlertUtility.onlyNumbersAndLetters();
+			} else if (workout.checkIfWorkoutExist(editName.getText())) {
+				AlertUtility.nameBusy();
+			} else {
+				workout.changeWorkoutProperties(editName.getText(), editDescription.getText(), editType.getText(),
+						editLevel.getText());
+				editWorkout(workout, mainPage);
 			}
 		});
 	}
@@ -267,25 +214,17 @@ public class PlansController {
 		mainPage.getChildren().clear();
 		editWorkoutPropertiesSupport(workout, mainPage);
 		List<Exercise> exerciseList;
-		try {
-			exerciseList = Exercise.downloadExercises();
-			ObservableList<String> options = FXCollections.observableArrayList();
-			for (Exercise exercise : exerciseList)
-				options.add(exercise.getName());
-			int i = 0;
-			for (Exercise exercise : workout.getExercises()) {
-				mainPage.getChildren().add(new Label());
-				editExerciseSupport(exercise, workout, options, i, mainPage);
-				i++;
-			}
-			addExerciseSupport(workout, options, mainPage);
-		} catch (ClassNotFoundException | IOException e) {
-			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Informacja");
-			alert.setHeaderText("");
-			alert.setContentText("Błąd pliku. Błąd: " + e.toString());
-			alert.showAndWait();
+		exerciseList = ExerciseUtility.downloadExercises();
+		ObservableList<String> options = FXCollections.observableArrayList();
+		for (Exercise exercise : exerciseList)
+			options.add(exercise.getName());
+		int i = 0;
+		for (Exercise exercise : workout.getExercises()) {
+			mainPage.getChildren().add(new Label());
+			editExerciseSupport(exercise, workout, options, i, mainPage);
+			i++;
 		}
+		addExerciseSupport(workout, options, mainPage);
 	}
 	/**
 	 * Metoda dodajaca trening
@@ -296,26 +235,18 @@ public class PlansController {
 		Workout workout = new Workout("", "", "", "");
 		String name = "Nowy";
 		int i = 1;
-		try {
-			while (workout.checkIfWorkoutExist(name)) {
-				i++;
-				name = "Nowy " + i;
-			}
-			workout.setWorkoutName(name);
-			workout.saveWorkout();
-			editWorkoutPropertiesSupport(workout, mainPage);
-			List<Exercise> exerciseList = Exercise.downloadExercises();
-			ObservableList<String> options = FXCollections.observableArrayList();
-			for (Exercise exercise : exerciseList)
-				options.add(exercise.getName());
-			addExerciseSupport(workout, options, mainPage);
-		} catch (ClassNotFoundException | IOException e) {
-			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Informacja");
-			alert.setHeaderText("");
-			alert.setContentText("Błąd podczas zapisywania/odczytywania pliku");
-			alert.showAndWait();
+		while (workout.checkIfWorkoutExist(name)) {
+			i++;
+			name = "Nowy " + i;
 		}
+		workout.setWorkoutName(name);
+		workout.saveWorkout();
+		editWorkoutPropertiesSupport(workout, mainPage);
+		List<Exercise> exerciseList = ExerciseUtility.downloadExercises();
+		ObservableList<String> options = FXCollections.observableArrayList();
+		for (Exercise exercise : exerciseList)
+			options.add(exercise.getName());
+		addExerciseSupport(workout, options, mainPage);
 	}
 	/**
 	 * Metoda do odbywania przerwy
@@ -431,11 +362,7 @@ public class PlansController {
 					doRest(workout, diary, exerciseNumber, setNumber, mainPage);
 			}
 			catch(NumberFormatException e){
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Wprowadzona wartość nie jest liczbą");
-				alert.showAndWait();
+				AlertUtility.noNumberValue();
 			}
 		});
 	}
@@ -481,11 +408,7 @@ public class PlansController {
 		start.setOnAction((event) -> {
 			Diary diary = new Diary();
 			if(workout.getExercises().isEmpty()){
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
-				alert.setHeaderText("");
-				alert.setContentText("Wybrany trening jest pusty.");
-				alert.showAndWait();
+				AlertUtility.emptyWorkout();
 			} else {
 				doSet(workout, diary, 1, 1, mainPage);
 			}

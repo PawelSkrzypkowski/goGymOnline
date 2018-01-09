@@ -11,16 +11,13 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InvalidClassException;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Blob;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
 /**
@@ -74,21 +71,6 @@ public class User implements Serializable {
 		GlobalUser.loggedUserId = user.getId();
 		entityManager.getTransaction().commit();
 		entityManager.close();
-	}
-	/**
-	 * Metoda odczytujaca uzytkownika
-	 * @return
-	 * @throws FileNotFoundException
-	 * @throws IOException
-	 * @throws ClassNotFoundException
-	 * @throws InvalidClassException
-	 */
-	public static User readUser(){
-		EntityManager entityManager = JPAHolder.getEntityManager();
-		User user = entityManager.find(User.class, GlobalUser.loggedUserId);
-		user.getLogs();
-		entityManager.close();
-		return user;
 	}
 	/**
 	 * Metoda obliczajca wiek uzytkownika
