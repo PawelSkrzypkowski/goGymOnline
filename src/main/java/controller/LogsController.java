@@ -18,6 +18,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import model.user.Log;
 import model.user.User;
+import model.user.utility.UserUtility;
+
 /**
  * Klasa - kontroler modułu aplikacji do dodawania pomiarów ciała
  * @author Paweł
@@ -44,7 +46,7 @@ public class LogsController implements Initializable {
 			AlertUtility.noNumberValue();
 			}
 		if (fail == false) {// jesli mozna dodac log
-			User user = User.readUser();
+			User user = UserUtility.readUser();
 			Log log = new Log(logInFloat);
 			user.addLog(log);
 			user.saveUser();

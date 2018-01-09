@@ -19,6 +19,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import model.user.Log;
 import model.user.User;
+import model.user.utility.LogUtility;
+import model.user.utility.UserUtility;
 
 /**
  * Klasa obsługująca sekcję kalkulatorów aplikacji
@@ -53,7 +55,7 @@ public class CalculatorsController {
 		des[7] = new Label("powyżej 40: III stopień otyłości");
 		TextField setWeight = new TextField(), setHeight = new TextField();
 		Button calculate = new Button("Oblicz");
-		User user = User.readUser();
+		User user = UserUtility.readUser();
 		setWeight.setPromptText("kg");
 		setWeight.setText(new Float(user.getLogs().get(user.getLogs().size() - 1).getWeight()).toString());
 		setWeight.setMaxWidth(100);
@@ -67,7 +69,7 @@ public class CalculatorsController {
 			setWeight.setText(setWeight.getText().replace(',', '.'));
 			setHeight.setText(setHeight.getText().replace(',', '.'));
 			try {
-				Double bmi = Log.calculateBMI(Float.parseFloat(setWeight.getText()),
+				Double bmi = LogUtility.calculateBMI(Float.parseFloat(setWeight.getText()),
 						Integer.parseInt(setHeight.getText()));
 				score.setText("Wynik: " + bmi.toString().substring(0, 4));
 				score.setVisible(true);
@@ -103,7 +105,7 @@ public class CalculatorsController {
 		descr.setFill(Color.WHITE);
 		TextField setWeight = new TextField(), setHeight = new TextField(), setAge = new TextField();
 		Button calculate = new Button("Oblicz");
-		User user = User.readUser();
+		User user = UserUtility.readUser();
 		setWeight.setPromptText("kg");
 		setWeight.setText(new Float(user.getLogs().get(user.getLogs().size() - 1).getWeight()).toString());
 		setWeight.setMaxWidth(100);
@@ -124,7 +126,7 @@ public class CalculatorsController {
 			setHeight.setText(setHeight.getText().replace(',', '.'));
 			setAge.setText(setAge.getText().replace(',', '.'));
 			try {
-				Integer bmr = Log.calculateBMR(isFemale, Float.parseFloat(setWeight.getText()),
+				Integer bmr = LogUtility.calculateBMR(isFemale, Float.parseFloat(setWeight.getText()),
 						Integer.parseInt(setHeight.getText()), Integer.parseInt(setAge.getText()));
 				score.setText("Wynik: " + bmr.toString());
 				score.setVisible(true);
@@ -168,7 +170,7 @@ public class CalculatorsController {
 				isFemale = false;
 			setHeight.setText(setHeight.getText().replace(',', '.'));
 			try {
-				Double pw = Log.calculateBroc(isFemale, Integer.parseInt(setHeight.getText()));
+				Double pw = LogUtility.calculateBroc(isFemale, Integer.parseInt(setHeight.getText()));
 				score.setText("Wynik: " + pw.toString().substring(0, 4));
 				score.setVisible(true);
 			} catch (NumberFormatException e) {
@@ -203,7 +205,7 @@ public class CalculatorsController {
 		descr.setFill(Color.WHITE);
 		TextField setWeight = new TextField(), setWaist = new TextField();
 		Button calculate = new Button("Oblicz");
-		User user = User.readUser();
+		User user = UserUtility.readUser();
 		setWeight.setPromptText("kg");
 		setWeight.setMaxWidth(100);
 		setWeight.setText(new Float(user.getLogs().get(user.getLogs().size() - 1).getWeight()).toString());
@@ -221,7 +223,7 @@ public class CalculatorsController {
 			setWeight.setText(setWeight.getText().replace(',', '.'));
 			setWaist.setText(setWaist.getText().replace(',', '.'));
 			try {
-				Double pw = Log.calculateFat(isFemale, Float.parseFloat(setWeight.getText()), Float.parseFloat(setWaist.getText()));
+				Double pw = LogUtility.calculateFat(isFemale, Float.parseFloat(setWeight.getText()), Float.parseFloat(setWaist.getText()));
 				score.setText("Wynik: " + pw.toString().substring(0, 4));
 				score.setVisible(true);
 			} catch (NumberFormatException e) {
@@ -250,7 +252,7 @@ public class CalculatorsController {
 		descr.setFill(Color.WHITE);
 		TextField setHips = new TextField(), setWaist = new TextField();
 		Button calculate = new Button("Oblicz");
-		User user = User.readUser();
+		User user = UserUtility.readUser();
 		setHips.setPromptText("kg");
 		setHips.setMaxWidth(100);
 		setHips.setText(new Float(user.getLogs().get(user.getLogs().size() - 1).getHips()).toString());
@@ -263,7 +265,7 @@ public class CalculatorsController {
 			setHips.setText(setHips.getText().replace(',', '.'));
 			setWaist.setText(setWaist.getText().replace(',', '.'));
 			try {
-				Double whr = Log.calculateWHR(Float.parseFloat(setHips.getText()), Float.parseFloat(setWaist.getText()));
+				Double whr = LogUtility.calculateWHR(Float.parseFloat(setHips.getText()), Float.parseFloat(setWaist.getText()));
 				score.setText(String.format("Wynik: %.2f", whr));
 				score.setVisible(true);
 			} catch (NumberFormatException e) {

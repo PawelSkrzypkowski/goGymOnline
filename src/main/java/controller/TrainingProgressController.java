@@ -31,7 +31,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import model.diary.Diary;
 import model.diary.Exercise;
+import model.diary.utility.DiaryUtility;
+import model.diary.utility.ExerciseUtility;
 import model.user.User;
+import model.user.utility.UserUtility;
 
 /**
  * Klasa - kontroler obsługujący sekcję do przeglądania postępów treningowych
@@ -48,7 +51,7 @@ public class TrainingProgressController {
 	 */
 	public void showExerciseChart(Exercise exercise, VBox mainPage) {
 		mainPage.getChildren().clear();
-		TreeMap<Date, Double> map = Diary.getMapDateRecord(exercise);
+		TreeMap<Date, Double> map = DiaryUtility.getMapDateRecord(exercise);
 		Double max = 0.0;
 		CategoryAxis xAxis = new CategoryAxis();
 		NumberAxis yAxis = new NumberAxis();
@@ -75,7 +78,7 @@ public class TrainingProgressController {
 	public void showLogChart(int i, VBox mainPage){
 		mainPage.getChildren().clear();
 		try {
-			TreeMap<Date, Float> tm = User.readUser().getDateLogMap(logNames[i]);
+			TreeMap<Date, Float> tm = UserUtility.readUser().getDateLogMap(logNames[i]);
 			CategoryAxis xAxis = new CategoryAxis();
 			NumberAxis yAxis = new NumberAxis();
 			LineChart<String, Number> chart = new LineChart<String, Number>(xAxis, yAxis);
@@ -112,7 +115,7 @@ public class TrainingProgressController {
 		XYChart.Series<String, Number> series = new XYChart.Series<String, Number>();
 		Double max = 0.0;
 		for (int i = 11; i >= 0; i--) {
-			Double raised = Diary.getMonthlyRaisedWeight(i);
+			Double raised = DiaryUtility.getMonthlyRaisedWeight(i);
 			String m = FirstStartControllerUtility.getMonthOptions().get(((Calendar.getInstance().get(Calendar.MONTH) - i) % 12 + 12) % 12);
 			series.getData().add(new XYChart.Data<String, Number>(m, raised));
 			if(raised > max)
@@ -129,7 +132,7 @@ public class TrainingProgressController {
 	 * @param fileName
 	 */
 	public void showTrainingSummary(VBox mainPage, String fileName) {
-		Diary diary = Diary.readDiary(fileName);
+		Diary diary = DiaryUtility.readDiary(fileName);
 		mainPage.getChildren().clear();
 		SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
 		Label summary = new Label("Podsumowanie treningu z dnia " + format.format(diary.getStartDate()));
@@ -173,22 +176,22 @@ public class TrainingProgressController {
 		Label summary = new Label("Podsumowanie treningów z miesiąca " + FirstStartControllerUtility.getMonthOptions().get(((Calendar.getInstance().get(Calendar.MONTH) - minusMonth) % 12 + 12) % 12));
 		summary.setFont(new Font(20));
 		mainPage.getChildren().add(summary);
-		Integer restTime = Diary.getMonthlyRestTime(minusMonth) / 60;// min
-		Integer exerciseTime = Diary.getMonthlyExercisingTime(minusMonth);
+		Integer restTime = DiaryUtility.getMonthlyRestTime(minusMonth) / 60;// min
+		Integer exerciseTime = DiaryUtility.getMonthlyExercisingTime(minusMonth);
 		Label label1 = new Label("Całkowity czas treningu:"), label2 = new Label("Czas ćwiczeń:");
 		label1.setPrefWidth(245);
 		label2.setPrefWidth(245);
-		Label label3 = new Label(Diary.getMonthlyTrainingTime(minusMonth) + " min");
+		Label label3 = new Label(DiaryUtility.getMonthlyTrainingTime(minusMonth) + " min");
 		label3.setFont(new Font(15));
 		Label label4 = new Label(exerciseTime.toString() + " min");
 		label4.setFont(new Font(15));
 		Label label5 = new Label("Czas odpoczynku:"), label6 = new Label("Wykonane ćwiczenia:");
 		Label label7 = new Label(restTime.toString() + " min");
 		label7.setFont(new Font(15));
-		Label label8 = new Label(Diary.getMonthlyExercisesDone(minusMonth).toString());
+		Label label8 = new Label(DiaryUtility.getMonthlyExercisesDone(minusMonth).toString());
 		label8.setFont(new Font(15));
 		Label label9 = new Label("Podniesiony cięar:");
-		Label label10 = new Label(Diary.getMonthlyRaisedWeight(minusMonth).toString() + " kg");
+		Label label10 = new Label(DiaryUtility.getMonthlyRaisedWeight(minusMonth).toString() + " kg");
 		label10.setFont(new Font(17));
 		GridPane gp = new GridPane();
 		gp.setPrefWidth(493);
@@ -215,7 +218,7 @@ public class TrainingProgressController {
 		mainPage.getChildren().addAll(trainingsSummaries, showExercisesSummaries, showMonthByMonthSummaries, showMeansurmentsSummaries);
 		trainingsSummaries.setOnAction((event) -> {
 			mainPage.getChildren().clear();
-			LinkedList<Diary> list = Diary.downloadDiaries();
+			LinkedList<Diary> list = DiaryUtility.downloadDiaries();
 			SortedSet<Date> set = new TreeSet<Date>(Collections.reverseOrder());
 			for(Diary d : list)
 				set.add(d.getStartDate());
@@ -231,7 +234,7 @@ public class TrainingProgressController {
 		});
 		showExercisesSummaries.setOnAction((event) -> {
 			mainPage.getChildren().clear();
-				List<Exercise> list = Exercise.downloadExercises();
+				List<Exercise> list = ExerciseUtility.downloadExercises();
 				for(Exercise ex : list){
 					Button button = new Button("Zobacz postępy w ćwiczeniu " + ex.getName());
 					mainPage.getChildren().add(button);

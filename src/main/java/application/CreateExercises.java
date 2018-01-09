@@ -16,6 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.diary.Exercise;
 import model.diary.Workout;
+import model.diary.utility.ExerciseUtility;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -83,13 +84,13 @@ public class CreateExercises {
 		LinkedList<Exercise> exercises = new LinkedList<Exercise>();
 		LinkedList<Integer> sets = new LinkedList<Integer>();
 		LinkedList<Integer> rest = new LinkedList<Integer>();
-		exercises.add(Exercise.readExercise("PRZYSIADY ZE SZTANGĄ TRZYMANĄ Z PRZODU"));
-		exercises.add(Exercise.readExercise("PODCIĄGANIE NA DRĄŻKU SZEROKIM UCHWYTEM (NACHWYT)"));
-		exercises.add(Exercise.readExercise("ROZPIĘTKI ZE SZTANGIELKAMI W LEŻENIU NA ŁAWCE SKOŚNEJ - GŁOWĄ DO GÓRY"));
-		exercises.add(Exercise.readExercise("Wyciskanie sztangi zza głowy"));
-		exercises.add(Exercise.readExercise("PROSTOWANIE RAMION NA WYCIĄGU STOJĄC"));
-		exercises.add(Exercise.readExercise("UGINANIE RAMION ZE SZTANGIELKAMI STOJĄC PODCHWYTEM(Z „SUPINACJĄ” NADGARSTKA)"));
-		exercises.add(Exercise.readExercise("SKŁONY TUŁOWIA Z LINKĄ WYCIĄGU KLĘCZĄC"));
+		exercises.add(ExerciseUtility.readExercise("PRZYSIADY ZE SZTANGĄ TRZYMANĄ Z PRZODU"));
+		exercises.add(ExerciseUtility.readExercise("PODCIĄGANIE NA DRĄŻKU SZEROKIM UCHWYTEM (NACHWYT)"));
+		exercises.add(ExerciseUtility.readExercise("ROZPIĘTKI ZE SZTANGIELKAMI W LEŻENIU NA ŁAWCE SKOŚNEJ - GŁOWĄ DO GÓRY"));
+		exercises.add(ExerciseUtility.readExercise("Wyciskanie sztangi zza głowy"));
+		exercises.add(ExerciseUtility.readExercise("PROSTOWANIE RAMION NA WYCIĄGU STOJĄC"));
+		exercises.add(ExerciseUtility.readExercise("UGINANIE RAMION ZE SZTANGIELKAMI STOJĄC PODCHWYTEM(Z „SUPINACJĄ” NADGARSTKA)"));
+		exercises.add(ExerciseUtility.readExercise("SKŁONY TUŁOWIA Z LINKĄ WYCIĄGU KLĘCZĄC"));
 		for(int i=0;i<7;i++){
 			sets.add(4);
 			rest.add(60);

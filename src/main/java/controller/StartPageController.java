@@ -32,6 +32,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.scene.control.Alert.AlertType;
 import model.user.User;
+import model.user.utility.UserUtility;
 import org.hibernate.engine.jdbc.BlobProxy;
 
 /**
@@ -110,7 +111,7 @@ public class StartPageController implements Initializable {
 					ByteArrayOutputStream baos = new ByteArrayOutputStream();
 					ImageIO.write(bi, "png", baos);
 					Blob blFile = BlobProxy.generateProxy(baos.toByteArray());
-					User user = User.readUser();
+					User user = UserUtility.readUser();
 					user.setAvatar(blFile);
 					user.saveUser();
 					loadAvatar();
@@ -128,7 +129,7 @@ public class StartPageController implements Initializable {
 	 * @throws IOException
 	 */
 	public void loadUserDetails(){
-		User user = User.readUser();
+		User user = UserUtility.readUser();
 		userData.setText("Witaj " + user.getFirstName() + " " + user.getLastName() + "!\n" + "Waga: "
 				+ user.getLogs().get(user.getLogs().size() - 1).getWeight() + " kg\n" + "Wiek: " + user.calculateAge()
 				+ " lat");
@@ -137,7 +138,7 @@ public class StartPageController implements Initializable {
 	 * Metoda laduajca avatar
 	 */
 	public void loadAvatar(){
-		User user = User.readUser();
+		User user = UserUtility.readUser();
 		InputStream avatarStream = null;
 		try {
 			avatarStream = user.getAvatar().getBinaryStream();

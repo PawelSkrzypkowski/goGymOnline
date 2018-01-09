@@ -37,6 +37,7 @@ import model.diary.Exercise;
 import model.diary.ExercisesDone;
 import model.diary.Set;
 import model.diary.Workout;
+import model.diary.utility.ExerciseUtility;
 import model.user.GlobalUser;
 import model.user.User;
 
@@ -133,10 +134,8 @@ public class PlansController {
 	public void saveEdittedExercise(Workout workout, String exerciseName, String setsNumber, String rest, int i) {
 		Exercise ex;
 		try {
-			ex = Exercise.readExercise(exerciseName);
-				workout.editExercise(i, ex, Integer.parseInt(setsNumber), Integer.parseInt(rest));
-		} catch (ClassNotFoundException | IOException e) {
-			AlertUtility.error(e);
+			ex = ExerciseUtility.readExercise(exerciseName);
+			workout.editExercise(i, ex, Integer.parseInt(setsNumber), Integer.parseInt(rest));
 		} catch(NumberFormatException e) {
 			AlertUtility.badData();
 		}
@@ -150,12 +149,8 @@ public class PlansController {
 	 */
 	public void saveNewExercise(Workout workout, String exerciseName, String setsNumber, String rest) {
 		Exercise ex;
-		try {
-			ex = Exercise.readExercise(exerciseName);
-			workout.addItemAtTheEnd(ex, Integer.parseInt(setsNumber), Integer.parseInt(rest));
-		} catch(NumberFormatException | ClassNotFoundException | IOException e){
-			AlertUtility.badData();
-		}
+		ex = ExerciseUtility.readExercise(exerciseName);
+		workout.addItemAtTheEnd(ex, Integer.parseInt(setsNumber), Integer.parseInt(rest));
 
 	}
 	/**
@@ -196,21 +191,17 @@ public class PlansController {
 		mainPage.getChildren().addAll(name, editName, description, editDescription, type, editType, level, editLevel,
 				save, header);
 		save.setOnAction((event) -> {
-			try {
-				if (!PlansControllerUtility.checkStringCorrectness(editName.getText())
-						|| !PlansControllerUtility.checkStringCorrectness(editDescription.getText())
-						|| !PlansControllerUtility.checkStringCorrectness(editType.getText())
-						|| !PlansControllerUtility.checkStringCorrectness(editLevel.getText())) {
-					AlertUtility.onlyNumbersAndLetters();
-				} else if (workout.checkIfWorkoutExist(editName.getText())) {
-					AlertUtility.nameBusy();
-				} else {
-					workout.changeWorkoutProperties(editName.getText(), editDescription.getText(), editType.getText(),
-							editLevel.getText());
-					editWorkout(workout, mainPage);
-				}
-			} catch (ClassNotFoundException | IOException e) {
-				AlertUtility.brokenFile();
+			if (!PlansControllerUtility.checkStringCorrectness(editName.getText())
+					|| !PlansControllerUtility.checkStringCorrectness(editDescription.getText())
+					|| !PlansControllerUtility.checkStringCorrectness(editType.getText())
+					|| !PlansControllerUtility.checkStringCorrectness(editLevel.getText())) {
+				AlertUtility.onlyNumbersAndLetters();
+			} else if (workout.checkIfWorkoutExist(editName.getText())) {
+				AlertUtility.nameBusy();
+			} else {
+				workout.changeWorkoutProperties(editName.getText(), editDescription.getText(), editType.getText(),
+						editLevel.getText());
+				editWorkout(workout, mainPage);
 			}
 		});
 	}
@@ -223,7 +214,7 @@ public class PlansController {
 		mainPage.getChildren().clear();
 		editWorkoutPropertiesSupport(workout, mainPage);
 		List<Exercise> exerciseList;
-		exerciseList = Exercise.downloadExercises();
+		exerciseList = ExerciseUtility.downloadExercises();
 		ObservableList<String> options = FXCollections.observableArrayList();
 		for (Exercise exercise : exerciseList)
 			options.add(exercise.getName());
@@ -244,22 +235,18 @@ public class PlansController {
 		Workout workout = new Workout("", "", "", "");
 		String name = "Nowy";
 		int i = 1;
-		try {
-			while (workout.checkIfWorkoutExist(name)) {
-				i++;
-				name = "Nowy " + i;
-			}
-			workout.setWorkoutName(name);
-			workout.saveWorkout();
-			editWorkoutPropertiesSupport(workout, mainPage);
-			List<Exercise> exerciseList = Exercise.downloadExercises();
-			ObservableList<String> options = FXCollections.observableArrayList();
-			for (Exercise exercise : exerciseList)
-				options.add(exercise.getName());
-			addExerciseSupport(workout, options, mainPage);
-		} catch (ClassNotFoundException | IOException e) {
-			AlertUtility.brokenFile();
+		while (workout.checkIfWorkoutExist(name)) {
+			i++;
+			name = "Nowy " + i;
 		}
+		workout.setWorkoutName(name);
+		workout.saveWorkout();
+		editWorkoutPropertiesSupport(workout, mainPage);
+		List<Exercise> exerciseList = ExerciseUtility.downloadExercises();
+		ObservableList<String> options = FXCollections.observableArrayList();
+		for (Exercise exercise : exerciseList)
+			options.add(exercise.getName());
+		addExerciseSupport(workout, options, mainPage);
 	}
 	/**
 	 * Metoda do odbywania przerwy
