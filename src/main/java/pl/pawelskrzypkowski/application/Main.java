@@ -12,6 +12,9 @@ import javafx.fxml.FXMLLoader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Locale;
+
 /**
  * Klasa do obsługi uruchomienia aplikacji
  * @author Paweł
@@ -25,6 +28,7 @@ public class Main extends Application {
 	 */
 	@Override
 	public void start(Stage primaryStage) {
+		System.out.println(LocaleHolder.changeDeafultInstance(Locale.US).getString("language"));
 		LOG.trace("Application start");
 		try {
 			VBox root = FXMLLoader.load(getClass().getResource("/LoginPage.fxml"));
