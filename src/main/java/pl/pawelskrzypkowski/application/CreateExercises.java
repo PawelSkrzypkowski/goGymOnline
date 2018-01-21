@@ -42,10 +42,10 @@ public class CreateExercises {
 			scene.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
 			stage.setScene(scene);
 			stage.setResizable(false);
-			stage.setTitle("Ładowanie plików");
+			stage.setTitle(LocaleHolder.getDefaultInstance().getString("createExercises.title"));
 			stage.getIcons().add(new Image((getClass().getResource("/images/icon.png").toExternalForm())));
 			stage.show();
-			Label descr = new Label("Ćwiczenia załadowane"), descr2 = new Label("Przykładowy trening załadowany");
+			Label descr = new Label(LocaleHolder.getDefaultInstance().getString("createExercises.descr")), descr2 = new Label(LocaleHolder.getDefaultInstance().getString("createExercises.descr2"));
 			root.getChildren().addAll(descr, descr2);
 			descr.setVisible(false);
 			descr2.setVisible(false);
@@ -67,9 +67,9 @@ public class CreateExercises {
 			LOG.trace("Workout and(if necessary) exercises loaded");
 		} catch (IOException | ClassNotFoundException e) {
 			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Informacja");
+			alert.setTitle(LocaleHolder.getDefaultInstance().getString("alert.information"));
 			alert.setHeaderText("");
-			alert.setContentText("Błąd: " + e.getMessage() + ". Ładowanie plików nie powiodło się.");
+			alert.setContentText(LocaleHolder.getDefaultInstance().getString("alert.error") + e.getMessage() + ". " + LocaleHolder.getDefaultInstance().getString("alert.errorLoadingFiles"));
 			alert.showAndWait();
 			LOG.error("Can't load workout and exercises. Error: " + e.getMessage());
 		}

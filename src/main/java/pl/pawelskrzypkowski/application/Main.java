@@ -28,7 +28,6 @@ public class Main extends Application {
 	 */
 	@Override
 	public void start(Stage primaryStage) {
-		System.out.println(LocaleHolder.changeDeafultInstance(Locale.US).getString("language"));
 		LOG.trace("Application start");
 		try {
 			VBox root = FXMLLoader.load(getClass().getResource("/LoginPage.fxml"));
@@ -36,7 +35,7 @@ public class Main extends Application {
 			scene.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.setResizable(false);
-			primaryStage.setTitle("goGym - Logowanie");
+			primaryStage.setTitle(LocaleHolder.getDefaultInstance().getString("loginPage.title"));
 
 			primaryStage.getIcons().add(new Image((getClass().getResource("/images/icon.png").toExternalForm())));
 			primaryStage.show();
@@ -45,9 +44,9 @@ public class Main extends Application {
 		} catch (Exception e) {
 			e.printStackTrace();
 			Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Informacja");
+			alert.setTitle(LocaleHolder.getDefaultInstance().getString("alert.information"));
 			alert.setHeaderText("");
-			alert.setContentText("Błąd: " + e.getMessage());
+			alert.setContentText(LocaleHolder.getDefaultInstance().getString("alert.error") + e.getMessage());
 			alert.showAndWait();
 			LOG.error("Can't start app. Error: " + e.getMessage());
 		}

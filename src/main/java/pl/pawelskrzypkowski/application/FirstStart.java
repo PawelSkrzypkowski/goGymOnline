@@ -1,6 +1,7 @@
 package pl.pawelskrzypkowski.application;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -24,12 +25,13 @@ public class FirstStart {
 	 */
 	public void newUser() throws IOException{
 			LOG.trace("Opening register window");
-			VBox root = FXMLLoader.load(getClass().getResource("/FirstStart.fxml"));
+			ResourceBundle resourceBundle = LocaleHolder.getDefaultInstance();
+			VBox root = FXMLLoader.load(getClass().getResource("/FirstStart.fxml"), resourceBundle);
 			Scene scene = new Scene(root,400,760);
 			scene.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
 			secondaryStage.setScene(scene);
 			secondaryStage.setResizable(false);
-			secondaryStage.setTitle("goGym - Rejestracja");
+			secondaryStage.setTitle(LocaleHolder.getDefaultInstance().getString("firstStart.title"));
 			secondaryStage.getIcons().add(new Image((getClass().getResource("/images/icon.png").toExternalForm())));
 			secondaryStage.show();
 			LOG.trace("Register window opened");

@@ -6,6 +6,7 @@ import java.io.InvalidClassException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.pawelskrzypkowski.application.LocaleHolder;
 import pl.pawelskrzypkowski.application.Main;
 import pl.pawelskrzypkowski.controller.utility.AlertUtility;
 import javafx.scene.control.Alert;
@@ -42,23 +43,23 @@ public class CalculatorsController {
 	public void showBMI(VBox mainPage)
 			throws InvalidClassException, FileNotFoundException, ClassNotFoundException, IOException {
 		LOG.trace("Loading BMI window");
-		Label weight = new Label("Waga:"), height = new Label("Wzrost:");
-		Label title = new Label("Wskażnik masy ciała - BMI");
+		Label weight = new Label(LocaleHolder.readMessage("calculators.bMI.weightLabel")), height = new Label(LocaleHolder.readMessage("calculators.bMI.heightLabel"));
+		Label title = new Label(LocaleHolder.readMessage("calculators.bMI.bMILabel"));
 		title.setFont(new Font(15));
 		Label des[] = new Label[8];
 		Label score = new Label();
 		score.setVisible(false);
 		score.setFont(new Font(15));
-		des[0] = new Label("do 16: wygłodzenie");
-		des[1] = new Label("od 16 do 17: wychudzenie");
-		des[2] = new Label("od 17 do 18.5: niedowaga");
-		des[3] = new Label("od 18.5 do 25: wartość prawidłowa");
-		des[4] = new Label("od 25 do 30: nadwaga");
-		des[5] = new Label("od 30 do 35: I stopień otyłości");
-		des[6] = new Label("od 35 do 40: II stopień otyłości");
-		des[7] = new Label("powyżej 40: III stopień otyłości");
+		des[0] = new Label(LocaleHolder.readMessage("calculators.description.0"));
+		des[1] = new Label(LocaleHolder.readMessage("calculators.description.1"));
+		des[2] = new Label(LocaleHolder.readMessage("calculators.description.2"));
+		des[3] = new Label(LocaleHolder.readMessage("calculators.description.3"));
+		des[4] = new Label(LocaleHolder.readMessage("calculators.description.4"));
+		des[5] = new Label(LocaleHolder.readMessage("calculators.description.5"));
+		des[6] = new Label(LocaleHolder.readMessage("calculators.description.6"));
+		des[7] = new Label(LocaleHolder.readMessage("calculators.description.7"));
 		TextField setWeight = new TextField(), setHeight = new TextField();
-		Button calculate = new Button("Oblicz");
+		Button calculate = new Button(LocaleHolder.readMessage("calculators.button.calculate"));
 		User user = UserUtility.readUser();
 		setWeight.setPromptText("kg");
 		setWeight.setText(new Float(user.getLogs().get(user.getLogs().size() - 1).getWeight()).toString());
@@ -75,7 +76,7 @@ public class CalculatorsController {
 			try {
 				Double bmi = LogUtility.calculateBMI(Float.parseFloat(setWeight.getText()),
 						Integer.parseInt(setHeight.getText()));
-				score.setText("Wynik: " + bmi.toString().substring(0, 4));
+				score.setText(LocaleHolder.readMessage("calculators.bMI.score") + bmi.toString().substring(0, 4));
 				score.setVisible(true);
 				LOG.trace("BMI calculated");
 			} catch (NumberFormatException e) {
@@ -101,25 +102,24 @@ public class CalculatorsController {
 		female.setToggleGroup(sex);
 		male.setToggleGroup(sex);
 		female.setSelected(true);
-		Label weight = new Label("Waga:"), height = new Label("Wzrost:"), age = new Label("Wiek:");
-		Label title = new Label("Wskaźnik podstawowej przemiany materii - BMR");
+		Label weight = new Label(LocaleHolder.readMessage("calculators.bMI.weightLabel")), height = new Label(LocaleHolder.readMessage("calculators.bMI.heightLabel")), age = new Label(LocaleHolder.readMessage("calculators.bMR.ageLabel"));
+		Label title = new Label(LocaleHolder.readMessage("calculators.bMR.bMRLabel"));
 		title.setFont(new Font(15));
 		Label score = new Label();
 		score.setVisible(false);
 		score.setFont(new Font(15));
-		Text descr = new Text(
-				"Współczynnik ten określa minimalną ilość kalorii niezbędnych do zachowania podstawowych funkcji organizmu.\nKalkulator dodatkowo określa niezbędną ilość kalorii i składników pożywienia przy określeniu poziomu Twojej aktywności fizycznej. Podany udział procentowy składników pożywienia zapewnia zdrowy i bezpieczny sposób odżywiania.");
+		Text descr = new Text(LocaleHolder.readMessage("calculators.bMR.description"));
 		descr.setWrappingWidth(450);
 		descr.setFill(Color.WHITE);
 		TextField setWeight = new TextField(), setHeight = new TextField(), setAge = new TextField();
-		Button calculate = new Button("Oblicz");
+		Button calculate = new Button(LocaleHolder.readMessage("calculators.button.calculate"));
 		User user = UserUtility.readUser();
 		setWeight.setPromptText("kg");
 		setWeight.setText(new Float(user.getLogs().get(user.getLogs().size() - 1).getWeight()).toString());
 		setWeight.setMaxWidth(100);
 		setHeight.setPromptText("cm");
 		setHeight.setMaxWidth(100);
-		setAge.setPromptText("lata");
+		setAge.setPromptText(LocaleHolder.readMessage("calculators.bMR.age"));
 		setAge.setText(new Integer(user.calculateAge()).toString());
 		mainPage.getChildren().clear();
 		mainPage.getChildren().addAll(title, descr, female, male, weight, setWeight, height, setHeight, age, setAge,
@@ -136,7 +136,7 @@ public class CalculatorsController {
 			try {
 				Integer bmr = LogUtility.calculateBMR(isFemale, Float.parseFloat(setWeight.getText()),
 						Integer.parseInt(setHeight.getText()), Integer.parseInt(setAge.getText()));
-				score.setText("Wynik: " + bmr.toString());
+				score.setText(LocaleHolder.readMessage("calculators.bMI.score") + bmr.toString());
 				score.setVisible(true);
 				LOG.trace("BMR calculated");
 			} catch (NumberFormatException e) {
@@ -153,23 +153,22 @@ public class CalculatorsController {
 	public void showPerfectWeight(VBox mainPage){
 		LOG.trace("Loading Perfect Weight window");
 		ToggleGroup sex = new ToggleGroup();
-		RadioButton female = new RadioButton("Kobieta");
-		RadioButton male = new RadioButton("Mężczyzna");
+		RadioButton female = new RadioButton(LocaleHolder.readMessage("calculators.pW.woman"));
+		RadioButton male = new RadioButton(LocaleHolder.readMessage("calculators.pW.man"));
 		female.setToggleGroup(sex);
 		male.setToggleGroup(sex);
 		female.setSelected(true);
-		Label height = new Label("Wzrost:");
-		Label title = new Label("Wskaźnik idealenj wagi - Wskaznik Broca");
+		Label height = new Label(LocaleHolder.readMessage("calculators.bMI.heightLabel"));
+		Label title = new Label(LocaleHolder.readMessage("calculators.pW.pWLabel"));
 		title.setFont(new Font(15));
 		Label score = new Label();
 		score.setVisible(false);
 		score.setFont(new Font(15));
-		Text descr = new Text(
-				"Podczas badał prowadzonych przez francuskiego lekarza Pierre'a Broca na żołnierzach w XIX wieku zauważono zależność, według której przeciętnie masa ciała badanych stanowiła wartość wzrostu w cm - 100. Obecnie stosuje się modyfikację tego wzoru z uwzględnieniem płci. Przyjmuje się, że wzór Broca jest miarodajny dla osób o wzroście nie mniejszym niż 160 cm i nie większym niż 190 cm.");
+		Text descr = new Text(LocaleHolder.readMessage("calculators.pW.description"));
 		descr.setWrappingWidth(450);
 		descr.setFill(Color.WHITE);
 		TextField setHeight = new TextField();
-		Button calculate = new Button("Oblicz");
+		Button calculate = new Button(LocaleHolder.readMessage("calculators.button.calculate"));
 		setHeight.setPromptText("cm");
 		setHeight.setMaxWidth(100);
 		mainPage.getChildren().clear();
@@ -183,7 +182,7 @@ public class CalculatorsController {
 			setHeight.setText(setHeight.getText().replace(',', '.'));
 			try {
 				Double pw = LogUtility.calculateBroc(isFemale, Integer.parseInt(setHeight.getText()));
-				score.setText("Wynik: " + pw.toString().substring(0, 4));
+				score.setText(LocaleHolder.readMessage("calculators.bMI.score") + pw.toString().substring(0, 4));
 				score.setVisible(true);
 				LOG.trace("Perfect weight calculated");
 			} catch (NumberFormatException e) {
@@ -204,23 +203,22 @@ public class CalculatorsController {
 	public void showFat(VBox mainPage) throws InvalidClassException, FileNotFoundException, ClassNotFoundException, IOException{
 		LOG.trace("Loading fat calculator window");
 		ToggleGroup sex = new ToggleGroup();
-		RadioButton female = new RadioButton("Kobieta");
-		RadioButton male = new RadioButton("Mężczyzna");
+		RadioButton female = new RadioButton(LocaleHolder.readMessage("calculators.pW.woman"));
+		RadioButton male = new RadioButton(LocaleHolder.readMessage("calculators.pW.man"));
 		female.setToggleGroup(sex);
 		male.setToggleGroup(sex);
 		female.setSelected(true);
-		Label weight = new Label("Waga:"), waist = new Label("Talia:");
-		Label title = new Label("Wskaźnik poziomu tkanki tłuszczowej");
+		Label weight = new Label(LocaleHolder.readMessage("calculators.bMI.weightLabel")), waist = new Label(LocaleHolder.readMessage("calculators.fat.waist"));
+		Label title = new Label(LocaleHolder.readMessage("calculators.fat.fatLabel"));
 		title.setFont(new Font(15));
 		Label score = new Label();
 		score.setVisible(false);
 		score.setFont(new Font(15));
-		Text descr = new Text(
-				"Jest to wskaźnik określający procentowy udział tłuszczu w masie całego ciała");
+		Text descr = new Text(LocaleHolder.readMessage("calculators.fat.description"));
 		descr.setWrappingWidth(450);
 		descr.setFill(Color.WHITE);
 		TextField setWeight = new TextField(), setWaist = new TextField();
-		Button calculate = new Button("Oblicz");
+		Button calculate = new Button(LocaleHolder.readMessage("calculators.button.calculate"));
 		User user = UserUtility.readUser();
 		setWeight.setPromptText("kg");
 		setWeight.setMaxWidth(100);
@@ -240,7 +238,7 @@ public class CalculatorsController {
 			setWaist.setText(setWaist.getText().replace(',', '.'));
 			try {
 				Double pw = LogUtility.calculateFat(isFemale, Float.parseFloat(setWeight.getText()), Float.parseFloat(setWaist.getText()));
-				score.setText("Wynik: " + pw.toString().substring(0, 4));
+				score.setText(LocaleHolder.readMessage("calculators.bMI.score") + pw.toString().substring(0, 4));
 				score.setVisible(true);
 				LOG.trace("Fat calculated");
 			} catch (NumberFormatException e) {
@@ -260,18 +258,17 @@ public class CalculatorsController {
 	 */
 	public void showWHR(VBox mainPage) throws InvalidClassException, FileNotFoundException, ClassNotFoundException, IOException{
 		LOG.trace("WHR window loading");
-		Label hips = new Label("Biodra:"), waist = new Label("Talia:");
-		Label title = new Label("Wskaźnik dystrybucji tkanki tłuszczowej - WHR");
+		Label hips = new Label(LocaleHolder.readMessage("calculators.wHR.hips")), waist = new Label(LocaleHolder.readMessage("calculators.fat.waist"));
+		Label title = new Label(LocaleHolder.readMessage("calculators.wHR.wHRLabel"));
 		title.setFont(new Font(15));
 		Label score = new Label();
 		score.setVisible(false);
 		score.setFont(new Font(15));
-		Text descr = new Text(
-				"Jest kolejnym sposobem na obliczanie poziom zapasowej tkanki tłuszczowej. Optymalna wartość nie powinna przekraczać 0,8 wśród kobiet i 1 u mężczyzn. Proporcje te minimalizują prawdopodobieństwo wystąpienia choroby wieńcowej i cukrzycy typu II.");
+		Text descr = new Text(LocaleHolder.readMessage("calculators.wHR.description"));
 		descr.setWrappingWidth(450);
 		descr.setFill(Color.WHITE);
 		TextField setHips = new TextField(), setWaist = new TextField();
-		Button calculate = new Button("Oblicz");
+		Button calculate = new Button(LocaleHolder.readMessage("calculators.button.calculate"));
 		User user = UserUtility.readUser();
 		setHips.setPromptText("kg");
 		setHips.setMaxWidth(100);
@@ -286,7 +283,7 @@ public class CalculatorsController {
 			setWaist.setText(setWaist.getText().replace(',', '.'));
 			try {
 				Double whr = LogUtility.calculateWHR(Float.parseFloat(setHips.getText()), Float.parseFloat(setWaist.getText()));
-				score.setText(String.format("Wynik: %.2f", whr));
+				score.setText(String.format(LocaleHolder.readMessage("calculators.bMI.score") + "%.2f", whr));
 				score.setVisible(true);
 				LOG.trace("WHR calculated");
 			} catch (NumberFormatException e) {
@@ -306,18 +303,18 @@ public class CalculatorsController {
 		ImageView calc = new ImageView("/images/calculators.png");
 		mainPage.getChildren().add(calc);
 		mainPage.setSpacing(10);
-		Button BMI = new Button("Kalkulator BMI"), BMR = new Button("Kalkulator BMR"),
-				perfectWeight = new Button("Kalkulator idealnej wagi"),
-				fat = new Button("Kalkulator tkanki tłuszczowej"), WHR = new Button("Kalkulator WHR");
+		Button BMI = new Button(LocaleHolder.readMessage("calculators.bMI")), BMR = new Button(LocaleHolder.readMessage("calculators.bMR")),
+				perfectWeight = new Button(LocaleHolder.readMessage("calculators.pW")),
+				fat = new Button(LocaleHolder.readMessage("calculators.fat")), WHR = new Button(LocaleHolder.readMessage("calculators.wHR"));
 		mainPage.getChildren().addAll(BMI, BMR, perfectWeight, fat, WHR);
 		BMI.setOnAction((event) -> {
 			try {
 				showBMI(mainPage);
 			} catch (ClassNotFoundException | IOException e) {
 				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Informacja");
+				alert.setTitle(LocaleHolder.readMessage("alert.information"));
 				alert.setHeaderText("");
-				alert.setContentText("Błąd odczytu pliku. Błąd: " + e.toString());
+				alert.setContentText(LocaleHolder.readMessage("alert.errorReadingFile") + e.getMessage());
 				alert.showAndWait();
 			}
 		});

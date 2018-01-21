@@ -1,5 +1,6 @@
 package pl.pawelskrzypkowski.application;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -20,5 +21,12 @@ public class LocaleHolder {
     public static ResourceBundle changeDeafultInstance(Locale locale){
         defaultLocale = ResourceBundle.getBundle("messages", locale);
         return getDefaultInstance();
+    }
+    public static String readMessage(String key){
+        try {
+            return new String(getDefaultInstance().getString(key).getBytes("ISO-8859-1"), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            return null;
+        }
     }
 }
