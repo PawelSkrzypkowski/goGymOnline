@@ -98,7 +98,7 @@ public class FirstStartController implements Initializable {
 			password.clear();
 		} catch (NoResultException e){}//brak uzytkownika o podanym loginie
 
-		if (fail == false) {// jesli mozna zarejestrować
+		if (!fail) {// jesli mozna zarejestrować
 			try {
 				Date birthDate = FirstStartControllerUtility.changeToDateType(birthDay.getValue(), birthMonth.getValue(), birthYear.getValue());
 				MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");

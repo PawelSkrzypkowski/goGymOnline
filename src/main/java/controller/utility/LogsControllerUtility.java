@@ -14,8 +14,8 @@ public class LogsControllerUtility {
             if (field.getText().isEmpty())
                 field.setText("0");
             logInFloat[i] = Float.parseFloat(field.getText());
+            i++;
         }
-        i++;
         return logInFloat;
     }
 
