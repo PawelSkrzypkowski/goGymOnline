@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.pawelskrzypkowski.application.FirstStart;
 import pl.pawelskrzypkowski.application.JPAHolder;
+import pl.pawelskrzypkowski.application.LocaleHolder;
 import pl.pawelskrzypkowski.application.Main;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -84,10 +85,10 @@ public class LoginController implements Initializable {
             try {
                 tryLogIn();
             } catch(NoSuchAlgorithmException e){
-                error.setText("Błąd algorytmu. Zgłoś to administratorowi.");
+                error.setText(LocaleHolder.readMessage("login.error.algorithm"));
                 error.setVisible(true);
             } catch (IOException e){
-                error.setText("Utworzenie sceny nie powiodło się.");
+                error.setText(LocaleHolder.readMessage("login.error.scene"));
                 e.printStackTrace();
                 error.setVisible(true);
             }
@@ -96,7 +97,7 @@ public class LoginController implements Initializable {
             try {
                 register();
             } catch(IOException e){
-                error.setText("Brak możliwości otworzenia okna rejestracji.");
+                error.setText(LocaleHolder.readMessage("login.error.window"));
                 error.setVisible(true);
                 LOG.error("Can't start register window");
             }
