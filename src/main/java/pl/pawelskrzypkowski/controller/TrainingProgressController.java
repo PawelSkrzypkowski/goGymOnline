@@ -36,7 +36,7 @@ import pl.pawelskrzypkowski.model.user.utility.UserUtility;
 public class TrainingProgressController {
 	static final Logger LOG = LoggerFactory.getLogger(Main.class);
 	private String[] logNames = new String[]{"Weight", "Neck", "Chest", "Biceps", "Waist", "Stomach", "Hips", "Thigh", "Calf"};
-	private String[] logNamesDictionary = new String[]{"Waga", "Szyja", "Klatka piersiowa", "Biceps", "Talia", "Brzuch", "Biodra", "Udo", "Łydka"};
+	private String[] logNamesDictionary = new String[]{LocaleHolder.readMessage("logName.weight"), LocaleHolder.readMessage("logName.neck"), LocaleHolder.readMessage("chest"), LocaleHolder.readMessage("logName.biceps"), LocaleHolder.readMessage("logName.waist"), LocaleHolder.readMessage("stomach"), LocaleHolder.readMessage("logName.hips"), LocaleHolder.readMessage("logName.thigh"), LocaleHolder.readMessage("logName.calf")};
 	/**
 	 * Metoda pokazująca wykres wybranego ćwiczenia
 	 * @param exercise
@@ -217,8 +217,8 @@ public class TrainingProgressController {
 		mainPage.getChildren().clear();
 		ImageView progress = new ImageView("/images/progress.png");
 		mainPage.getChildren().add(progress);
-		Button trainingsSummaries = new Button("Pokaż podsumowanie treningów"), showExercisesSummaries = new Button("Pokaż podsumowanie ćwiczeń"), showMonthByMonthSummaries = new Button("Pokaż podsumowanie miesięczne"),
-				showMeansurmentsSummaries = new Button("Pokaż podsumowanie pomiarów ciała");
+		Button trainingsSummaries = new Button(LocaleHolder.readMessage("trainingProgress.button.trainingSummary")), showExercisesSummaries = new Button(LocaleHolder.readMessage("trainingProgress.button.exerciseSummary")), showMonthByMonthSummaries = new Button(LocaleHolder.readMessage("trainingProgress.button.monthSummary")),
+				showMeansurmentsSummaries = new Button(LocaleHolder.readMessage("trainingProgress.button.bodySummary"));
 		mainPage.setSpacing(10);
 		mainPage.getChildren().addAll(trainingsSummaries, showExercisesSummaries, showMonthByMonthSummaries, showMeansurmentsSummaries);
 		trainingsSummaries.setOnAction((event) -> {
@@ -229,7 +229,7 @@ public class TrainingProgressController {
 				set.add(d.getStartDate());
 			for(Date date : set){
 				SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-				Button button = new Button("Trening z dnia: " + sdf.format(date));
+				Button button = new Button(LocaleHolder.readMessage("trainingProgress.button.trainingDay") + sdf.format(date));
 				mainPage.getChildren().add(button);
 				button.setOnAction((event2) -> {
 					SimpleDateFormat sdf2 = new SimpleDateFormat("dd-MM-yyyy HH-mm-ss");
@@ -241,7 +241,7 @@ public class TrainingProgressController {
 			mainPage.getChildren().clear();
 				List<Exercise> list = ExerciseUtility.downloadExercises();
 				for(Exercise ex : list){
-					Button button = new Button("Zobacz postępy w ćwiczeniu " + ex.getName());
+					Button button = new Button(LocaleHolder.readMessage("trainingProgress.button.exerciseProgress") + ex.getName());
 					mainPage.getChildren().add(button);
 					button.setOnAction((event2) -> {
 						showExerciseChart(ex, mainPage);
@@ -252,7 +252,7 @@ public class TrainingProgressController {
 			showMonthlyRaisedWeightChart(mainPage);
 			for (int i = 0; i <= 11; i++) {
 				String m = FirstStartControllerUtility.getMonthOptions().get(((Calendar.getInstance().get(Calendar.MONTH) - i) % 12 + 12) % 12);
-				Button monthSummary = new Button("Podsumowanie miesiąca " + m);
+				Button monthSummary = new Button(LocaleHolder.readMessage("trainingProgress.button.monthProgress") + m);
 				mainPage.getChildren().add(monthSummary);
 				final int i2 = i;
 				monthSummary.setOnAction((event2) -> {
@@ -264,7 +264,7 @@ public class TrainingProgressController {
 			mainPage.getChildren().clear();
 			int i=0;
 			for(@SuppressWarnings("unused") String s : logNames){
-				Button button = new Button("Postępy - " + logNamesDictionary[i]);
+				Button button = new Button(LocaleHolder.readMessage("trainingProgress.button.progress") + logNamesDictionary[i]);
 				mainPage.getChildren().add(button);
 				final int in = i;
 				button.setOnAction((event2) -> {

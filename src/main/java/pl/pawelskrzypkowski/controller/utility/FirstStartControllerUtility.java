@@ -2,6 +2,7 @@ package pl.pawelskrzypkowski.controller.utility;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import pl.pawelskrzypkowski.application.LocaleHolder;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,8 +31,8 @@ public class FirstStartControllerUtility {
 
     private static ObservableList<Integer> dayOptions = FXCollections.observableArrayList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
             14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31);
-    private static ObservableList<String> monthOptions = FXCollections.observableArrayList("Styczeń", "Luty", "Marzec", "Kwiecień",
-            "Maj", "Czerwiec", "Lipiec", "Sierpień", "Wrzesień", "Październik", "Listopad", "Grudzień");
+    private static ObservableList<String> monthOptions = FXCollections.observableArrayList(LocaleHolder.readMessage("month.january"), LocaleHolder.readMessage("month.february"), LocaleHolder.readMessage("month.march"), LocaleHolder.readMessage("month.april"),
+            LocaleHolder.readMessage("month.may"), LocaleHolder.readMessage("month.june"), LocaleHolder.readMessage("month.july"), LocaleHolder.readMessage("month.august"), LocaleHolder.readMessage("month.september"), LocaleHolder.readMessage("month.october"), LocaleHolder.readMessage("month.november"), LocaleHolder.readMessage("month.december"));
 
     public static ObservableList<String> getMonthOptions() {
         return monthOptions;
