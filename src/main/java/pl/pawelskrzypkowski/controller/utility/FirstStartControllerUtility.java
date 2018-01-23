@@ -51,45 +51,13 @@ public class FirstStartControllerUtility {
      * @throws ParseException
      */
     public static Date changeToDateType(Integer day, String month, Integer year) throws ParseException {
-        switch (month) {
-            case "Styczeń":
-                month = "01";
+        for(int i=0; i<monthOptions.size(); i++) {
+            if(month.equals(monthOptions.get(i))) {
+                month = Integer.toString(i);
+                if(month.length()<2)
+                    month = "0".concat(month);
                 break;
-            case "Luty":
-                month = "02";
-                break;
-            case "Marzec":
-                month = "03";
-                break;
-            case "Kwiecień":
-                month = "04";
-                break;
-            case "Maj":
-                month = "05";
-                break;
-            case "Czerwiec":
-                month = "06";
-                break;
-            case "Lipiec":
-                month = "07";
-                break;
-            case "Sierpień":
-                month = "08";
-                break;
-            case "Wrzesień":
-                month = "09";
-                break;
-            case "Październik":
-                month = "10";
-                break;
-            case "Listopad":
-                month = "11";
-                break;
-            case "Grudzień":
-                month = "12";
-                break;
-            default:
-                month = "1";
+            }
         }
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         format.setLenient(false);

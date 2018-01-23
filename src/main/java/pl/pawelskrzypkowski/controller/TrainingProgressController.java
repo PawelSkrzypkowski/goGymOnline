@@ -36,7 +36,7 @@ import pl.pawelskrzypkowski.model.user.utility.UserUtility;
 public class TrainingProgressController {
 	static final Logger LOG = LoggerFactory.getLogger(Main.class);
 	private String[] logNames = new String[]{"Weight", "Neck", "Chest", "Biceps", "Waist", "Stomach", "Hips", "Thigh", "Calf"};
-	private String[] logNamesDictionary = new String[]{LocaleHolder.readMessage("logName.weight"), LocaleHolder.readMessage("logName.neck"), LocaleHolder.readMessage("chest"), LocaleHolder.readMessage("logName.biceps"), LocaleHolder.readMessage("logName.waist"), LocaleHolder.readMessage("stomach"), LocaleHolder.readMessage("logName.hips"), LocaleHolder.readMessage("logName.thigh"), LocaleHolder.readMessage("logName.calf")};
+	private String[] logNamesDictionary = new String[]{LocaleHolder.readMessage("logName.weight"), LocaleHolder.readMessage("logName.neck"), LocaleHolder.readMessage("logName.chest"), LocaleHolder.readMessage("logName.biceps"), LocaleHolder.readMessage("logName.waist"), LocaleHolder.readMessage("logName.stomach"), LocaleHolder.readMessage("logName.hips"), LocaleHolder.readMessage("logName.thigh"), LocaleHolder.readMessage("logName.calf")};
 	/**
 	 * Metoda pokazująca wykres wybranego ćwiczenia
 	 * @param exercise
