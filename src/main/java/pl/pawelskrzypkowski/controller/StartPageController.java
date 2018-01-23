@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.pawelskrzypkowski.application.LocaleHolder;
 import pl.pawelskrzypkowski.application.Logs;
 import pl.pawelskrzypkowski.application.Main;
 import pl.pawelskrzypkowski.controller.utility.AlertUtility;
@@ -95,7 +96,7 @@ public class StartPageController implements Initializable {
 		editAvatar.setOnMouseClicked((event) -> {
 			LOG.trace("Editing avatar");
 			FileChooser chooseFile = new FileChooser();
-			chooseFile.setTitle("Wybierz plik");
+			chooseFile.setTitle(LocaleHolder.readMessage("startPage.avatarChoose"));
 			chooseFile.getExtensionFilters().add(new ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
 			Stage stage = (Stage) root.getScene().getWindow();
 			File file = chooseFile.showOpenDialog(stage);
@@ -137,9 +138,9 @@ public class StartPageController implements Initializable {
 	 */
 	public void loadUserDetails(){
 		User user = UserUtility.readUser();
-		userData.setText("Witaj " + user.getFirstName() + " " + user.getLastName() + "!\n" + "Waga: "
-				+ user.getLogs().get(user.getLogs().size() - 1).getWeight() + " kg\n" + "Wiek: " + user.calculateAge()
-				+ " lat");
+		userData.setText(LocaleHolder.readMessage("startPage.userDetails.1") + user.getFirstName() + " " + user.getLastName() + "!\n" + LocaleHolder.readMessage("startPage.userDetails.2")
+				+ user.getLogs().get(user.getLogs().size() - 1).getWeight() + " kg\n" + LocaleHolder.readMessage("startPage.userDetails.3") + user.calculateAge()
+				+ LocaleHolder.readMessage("startPage.userDetails.4"));
 		LOG.trace("User details loaded");
 	}
 	/**
@@ -175,8 +176,8 @@ public class StartPageController implements Initializable {
 		sp.setFitToWidth(true);
 		sp.setStyle("-fx-background-color:  #2e3539");
 		page.getChildren().add(sp);
-		Text text = new Text("Witaj w aplikacji goGym. Aplikacja umożliwia układanie własnych treningów oraz przeprowadzanie ich w czasie rzeczywistym. Wspieranie się goGym w codziennych treningach gwarantuje wykonanie zaplanowanej ilości ćwiczeń, serii oraz przerw.\n"
-				+ "Ponadto aplikacja umożliwia obliczanie podstawowych wskaźników ciała człowieka oraz śledzenie postępów w perspektywie ćwiczeń, miesięcy oraz własnego ciała.\n\n Zapraszamy do ćwiczenia i życzymy wielu sukcesów!");
+		Text text = new Text(LocaleHolder.readMessage("startPage.hello.1") + "\n"
+				+ LocaleHolder.readMessage("startPage.hello.2") + "\n\n" + LocaleHolder.readMessage("startPage.hello.3"));
 		text.setWrappingWidth(450);
 		text.setFill(Color.WHITE);
 		mainPage.getChildren().add(text);

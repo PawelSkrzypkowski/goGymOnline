@@ -45,7 +45,7 @@ public class LogsController implements Initializable {
 			fail = true;
 			AlertUtility.noNumberValue();
 			LOG.warn("No number value of user input. Can't add log");
-			}
+		}
 		if (fail == false) {// jesli mozna dodac log
 			User user = UserUtility.readUser();
 			Log log = new Log(logInFloat);

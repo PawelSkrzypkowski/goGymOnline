@@ -2,19 +2,12 @@ package pl.pawelskrzypkowski.controller;
 
 import java.lang.reflect.InvocationTargetException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.pawelskrzypkowski.application.LocaleHolder;
 import pl.pawelskrzypkowski.application.Main;
 import pl.pawelskrzypkowski.controller.utility.AlertUtility;
 import pl.pawelskrzypkowski.controller.utility.FirstStartControllerUtility;
@@ -43,7 +36,7 @@ import pl.pawelskrzypkowski.model.user.utility.UserUtility;
 public class TrainingProgressController {
 	static final Logger LOG = LoggerFactory.getLogger(Main.class);
 	private String[] logNames = new String[]{"Weight", "Neck", "Chest", "Biceps", "Waist", "Stomach", "Hips", "Thigh", "Calf"};
-	private String[] logNamesPl = new String[]{"Waga", "Szyja", "Klatka piersiowa", "Biceps", "Talia", "Brzuch", "Biodra", "Udo", "Łydka"};
+	private String[] logNamesDictionary = new String[]{"Waga", "Szyja", "Klatka piersiowa", "Biceps", "Talia", "Brzuch", "Biodra", "Udo", "Łydka"};
 	/**
 	 * Metoda pokazująca wykres wybranego ćwiczenia
 	 * @param exercise
@@ -57,7 +50,7 @@ public class TrainingProgressController {
 		CategoryAxis xAxis = new CategoryAxis();
 		NumberAxis yAxis = new NumberAxis();
 		LineChart<String, Number> chart = new LineChart<String, Number>(xAxis, yAxis);
-		chart.setTitle("Postępy w ćwiczeniu " + exercise.getName());
+		chart.setTitle(LocaleHolder.readMessage("trainingProgress.chart.1") + exercise.getName());
 		XYChart.Series<String, Number> series = new XYChart.Series<String, Number>();
 		Set<Entry<Date, Double>> entrySet = map.entrySet();
 		for (Entry<Date, Double> entry : entrySet) {
@@ -66,9 +59,9 @@ public class TrainingProgressController {
 			if (max < entry.getValue())
 				max = entry.getValue();
 		}
-		series.setName("Maksymalne wyniki na poszczególnych treningach");
+		series.setName(LocaleHolder.readMessage("trainingProgress.series.1"));
 		chart.getData().add(series);
-		Label record = new Label("Aktualny rekord: " + max.toString());
+		Label record = new Label(LocaleHolder.readMessage("trainingProgress.label.1") + max.toString());
 		mainPage.getChildren().addAll(chart, record);
 		LOG.trace("Exercise chart loaded");
 	}
@@ -96,9 +89,9 @@ public class TrainingProgressController {
 				if(min > entry.getValue())
 					min = entry.getValue();
 			}
-			series.setName("Zmiany partii ciała: " + logNamesPl[i]);
+			series.setName(LocaleHolder.readMessage("trainingProgress.series.2") + logNamesDictionary[i]);
 			chart.getData().add(series);
-			Label recordMin = new Label("Najmniejsza wartość: " + min.toString()), recordMax = new Label("Największa wartość: " + max.toString());
+			Label recordMin = new Label(LocaleHolder.readMessage("trainingProgress.label.2") + min.toString()), recordMax = new Label(LocaleHolder.readMessage("trainingProgress.label.3") + max.toString());
 			mainPage.getChildren().addAll(chart, recordMin, recordMax);
 			LOG.trace("Log chart loaded");
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
@@ -117,7 +110,7 @@ public class TrainingProgressController {
 		CategoryAxis xAxis = new CategoryAxis();
 		NumberAxis yAxis = new NumberAxis();
 		LineChart<String, Number> chart = new LineChart<String, Number>(xAxis, yAxis);
-		chart.setTitle("Raport miesięczny - podnoszony cięar");
+		chart.setTitle(LocaleHolder.readMessage("trainingProgress.chart.2"));
 		XYChart.Series<String, Number> series = new XYChart.Series<String, Number>();
 		Double max = 0.0;
 		for (int i = 11; i >= 0; i--) {
@@ -127,9 +120,9 @@ public class TrainingProgressController {
 			if(raised > max)
 				max = raised;
 		}
-		series.setName("Podnoszony cięar w przeciągu roku");
+		series.setName(LocaleHolder.readMessage(LocaleHolder.readMessage("trainingProgress.series.3")));
 		chart.getData().add(series);
-		Label record = new Label("Aktualny miesięczny rekord: " + max.toString());
+		Label record = new Label(LocaleHolder.readMessage("trainingProgress.label.4") + max.toString());
 		mainPage.getChildren().addAll(chart, record);
 		LOG.trace("Monthly raised weight chart loaded");
 	}
@@ -143,24 +136,24 @@ public class TrainingProgressController {
 		Diary diary = DiaryUtility.readDiary(fileName);
 		mainPage.getChildren().clear();
 		SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-		Label summary = new Label("Podsumowanie treningu z dnia " + format.format(diary.getStartDate()));
+		Label summary = new Label(LocaleHolder.readMessage("trainingProgress.label.5") + format.format(diary.getStartDate()));
 		summary.setFont(new Font(20));
 		mainPage.getChildren().add(summary);
 		Integer restTime = diary.getRestTime() / 60;// min
 		Integer exerciseTime = diary.showTrainingTime() - restTime;
-		Label label1 = new Label("Całkowity czas treningu:"), label2 = new Label("Czas ćwiczeń:");
+		Label label1 = new Label(LocaleHolder.readMessage("trainingProgress.label.6")), label2 = new Label(LocaleHolder.readMessage("trainingProgress.label.7"));
 		label1.setPrefWidth(245);
 		label2.setPrefWidth(245);
-		Label label3 = new Label(diary.showTrainingTime().toString() + " min");
+		Label label3 = new Label(diary.showTrainingTime().toString() + LocaleHolder.readMessage("trainingProgress.label.8"));
 		label3.setFont(new Font(15));
-		Label label4 = new Label(exerciseTime.toString() + " min");
+		Label label4 = new Label(exerciseTime.toString() + LocaleHolder.readMessage("trainingProgress.label.8"));
 		label4.setFont(new Font(15));
-		Label label5 = new Label("Czas odpoczynku:"), label6 = new Label("Wykonane ćwiczenia:");
-		Label label7 = new Label(restTime.toString() + " min");
+		Label label5 = new Label(LocaleHolder.readMessage("trainingProgress.label.9")), label6 = new Label(LocaleHolder.readMessage("trainingProgress.label.10"));
+		Label label7 = new Label(restTime.toString() + LocaleHolder.readMessage("trainingProgress.label.8"));
 		label7.setFont(new Font(15));
 		Label label8 = new Label(new Integer(diary.getExercisesDone().size()).toString());
 		label8.setFont(new Font(15));
-		Label label9 = new Label("Podniesiony cięar:");
+		Label label9 = new Label(LocaleHolder.readMessage("trainingProgress.label.11"));
 		Label label10 = new Label(new Double(diary.showRaisedWeight()).toString() + " kg");
 		label10.setFont(new Font(17));
 		GridPane gp = new GridPane();
@@ -183,24 +176,24 @@ public class TrainingProgressController {
 	public void showMonthSummary(VBox mainPage, int minusMonth) {
 		LOG.trace("Loading month summary");
 		mainPage.getChildren().clear();
-		Label summary = new Label("Podsumowanie treningów z miesiąca " + FirstStartControllerUtility.getMonthOptions().get(((Calendar.getInstance().get(Calendar.MONTH) - minusMonth) % 12 + 12) % 12));
+		Label summary = new Label(LocaleHolder.readMessage("trainingProgress.label.12") + FirstStartControllerUtility.getMonthOptions().get(((Calendar.getInstance().get(Calendar.MONTH) - minusMonth) % 12 + 12) % 12));
 		summary.setFont(new Font(20));
 		mainPage.getChildren().add(summary);
 		Integer restTime = DiaryUtility.getMonthlyRestTime(minusMonth) / 60;// min
 		Integer exerciseTime = DiaryUtility.getMonthlyExercisingTime(minusMonth);
-		Label label1 = new Label("Całkowity czas treningu:"), label2 = new Label("Czas ćwiczeń:");
+		Label label1 = new Label(LocaleHolder.readMessage("trainingProgress.label.13")), label2 = new Label(LocaleHolder.readMessage("trainingProgress.label.7"));
 		label1.setPrefWidth(245);
 		label2.setPrefWidth(245);
-		Label label3 = new Label(DiaryUtility.getMonthlyTrainingTime(minusMonth) + " min");
+		Label label3 = new Label(DiaryUtility.getMonthlyTrainingTime(minusMonth) + LocaleHolder.readMessage("trainingProgress.label.8"));
 		label3.setFont(new Font(15));
-		Label label4 = new Label(exerciseTime.toString() + " min");
+		Label label4 = new Label(exerciseTime.toString() + LocaleHolder.readMessage("trainingProgress.label.8"));
 		label4.setFont(new Font(15));
-		Label label5 = new Label("Czas odpoczynku:"), label6 = new Label("Wykonane ćwiczenia:");
+		Label label5 = new Label(LocaleHolder.readMessage("trainingProgress.label.9")), label6 = new Label(LocaleHolder.readMessage("trainingProgress.label.10"));
 		Label label7 = new Label(restTime.toString() + " min");
 		label7.setFont(new Font(15));
 		Label label8 = new Label(DiaryUtility.getMonthlyExercisesDone(minusMonth).toString());
 		label8.setFont(new Font(15));
-		Label label9 = new Label("Podniesiony cięar:");
+		Label label9 = new Label(LocaleHolder.readMessage("trainingProgress.label.11"));
 		Label label10 = new Label(DiaryUtility.getMonthlyRaisedWeight(minusMonth).toString() + " kg");
 		label10.setFont(new Font(17));
 		GridPane gp = new GridPane();
@@ -271,7 +264,7 @@ public class TrainingProgressController {
 			mainPage.getChildren().clear();
 			int i=0;
 			for(@SuppressWarnings("unused") String s : logNames){
-				Button button = new Button("Postępy - " + logNamesPl[i]);
+				Button button = new Button("Postępy - " + logNamesDictionary[i]);
 				mainPage.getChildren().add(button);
 				final int in = i;
 				button.setOnAction((event2) -> {

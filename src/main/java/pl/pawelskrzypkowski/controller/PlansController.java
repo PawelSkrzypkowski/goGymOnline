@@ -9,6 +9,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.pawelskrzypkowski.application.JPAHolder;
+import pl.pawelskrzypkowski.application.LocaleHolder;
 import pl.pawelskrzypkowski.application.Main;
 import pl.pawelskrzypkowski.controller.utility.AlertUtility;
 import pl.pawelskrzypkowski.controller.utility.PlansControllerUtility;
@@ -85,9 +86,9 @@ public class PlansController {
 		editSetsNumber.setMaxWidth(50);
 		TextField editRest = new TextField(workout.getRest().get(i).toString());
 		editRest.setMaxWidth(50);
-		Label setsNumber = new Label("Ilośc serii: "), rest = new Label("Odpoczynek: ");
-		Button save = new Button("Zapisz"), delete = new Button("Usuń"), up = new Button("Do góry"),
-				down = new Button("Do dołu");
+		Label setsNumber = new Label(LocaleHolder.readMessage("plans.label.setsNumber")), rest = new Label(LocaleHolder.readMessage("plans.label.rest"));
+		Button save = new Button(LocaleHolder.readMessage("plans.button.save")), delete = new Button(LocaleHolder.readMessage("plans.button.delete")), up = new Button(LocaleHolder.readMessage("plans.button.up")),
+				down = new Button(LocaleHolder.readMessage("plans.button.down"));
 		HBox hb = new HBox();
 		hb.setSpacing(30);
 		if (i == 0 && i == workout.getExercises().size() - 1)
@@ -168,14 +169,14 @@ public class PlansController {
 	 */
 	public void addExerciseSupport(Workout workout, ObservableList<String> options, VBox mainPage) {
 		LOG.trace("Loading new exercise window");
-		Label add = new Label("Dodaj: ");
+		Label add = new Label(LocaleHolder.readMessage("plans.label.add"));
 		add.setFont(new Font(15));
-		Label setsNumber = new Label("Ilośc serii: "), rest = new Label("Odpoczynek: ");
+		Label setsNumber = new Label(LocaleHolder.readMessage("plans.label.setsNumber")), rest = new Label(LocaleHolder.readMessage("plans.label.rest"));
 		TextField editSetsNumber = new TextField("3");
 		TextField editRest = new TextField();
-		editRest.setPromptText("sekundy");
+		editRest.setPromptText(LocaleHolder.readMessage("plans.input.prompt.seconds"));
 		ComboBox<String> cb = new ComboBox<String>(options);
-		Button save = new Button("Zapisz");
+		Button save = new Button(LocaleHolder.readMessage("plans.button.save"));
 		mainPage.getChildren().addAll(add, cb, setsNumber, editSetsNumber, rest, editRest, save);
 		save.setOnAction((event) -> {
 			saveNewExercise(workout, cb.getValue(), editSetsNumber.getText(), editRest.getText());
@@ -190,14 +191,14 @@ public class PlansController {
 	 */
 	public void editWorkoutPropertiesSupport(Workout workout, VBox mainPage) {
 		LOG.trace("Loading workout properties window");
-		Label name = new Label("Nazwa:"), description = new Label("Opis:"), type = new Label("Typ treningu:"),
-				level = new Label("Poziom treningu:"), header = new Label("Ćwiczenia:");
+		Label name = new Label(LocaleHolder.readMessage("plans.label.name")), description = new Label(LocaleHolder.readMessage("plans.label.description")), type = new Label(LocaleHolder.readMessage("plans.label.type")),
+				level = new Label(LocaleHolder.readMessage("plans.label.level")), header = new Label(LocaleHolder.readMessage("plans.label.header"));
 		header.setFont(new Font(15));
 		TextField editName = new TextField(workout.getWorkoutName()),
 				editType = new TextField(workout.getWorkoutType()),
 				editLevel = new TextField(workout.getDifficultyLevel());
 		TextArea editDescription = new TextArea(workout.getWorkoutDescription());
-		Button save = new Button("Zapisz");
+		Button save = new Button(LocaleHolder.readMessage("plans.button.save"));
 		mainPage.getChildren().addAll(name, editName, description, editDescription, type, editType, level, editLevel,
 				save, header);
 		save.setOnAction((event) -> {
@@ -248,11 +249,11 @@ public class PlansController {
 		LOG.trace("Adding new workout");
 		mainPage.getChildren().clear();
 		Workout workout = new Workout("", "", "", "");
-		String name = "Nowy";
+		String name = LocaleHolder.readMessage("plans.newWorkoutName");
 		int i = 1;
 		while (workout.checkIfWorkoutExist(name)) {
 			i++;
-			name = "Nowy " + i;
+			name = LocaleHolder.readMessage("plans.newWorkoutName") + " " + i;
 		}
 		workout.setWorkoutName(name);
 		workout.saveWorkout();
@@ -280,7 +281,7 @@ public class PlansController {
 		IntegerProperty startTime = new SimpleIntegerProperty(START);
 		Label seconds = new Label();
 		seconds.textProperty().bind(startTime.asString());
-		Button skip = new Button("Pomiń");
+		Button skip = new Button(LocaleHolder.readMessage("plans.button.skip"));
 		mainPage.getChildren().addAll(seconds, skip);
 		Timeline timeline = new Timeline();
 		timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(START + 1), new KeyValue(startTime, 0)));
@@ -321,12 +322,12 @@ public class PlansController {
 		Exercise exercise = workout.getExercises().get(exerciseNumber - 1);
 		Label exerciseName = new Label(exercise.getName());
 		TextField reps = new TextField(), weight = new TextField();
-		reps.setPromptText("Ilość powtórzeń");
-		weight.setPromptText("Ciężar");
+		reps.setPromptText(LocaleHolder.readMessage("plans.input.prompt.reps"));
+		weight.setPromptText(LocaleHolder.readMessage("plans.input.prompt.weight"));
 		HBox set = new HBox(15);
 		set.getChildren().addAll(reps, new Label("x"), weight);
-		Button save = new Button("Zapisz"), skipSet = new Button("Pomiń serię"),
-				skipExercise = new Button("Pomiń ćwiczenie");
+		Button save = new Button(LocaleHolder.readMessage("plans.button.save")), skipSet = new Button(LocaleHolder.readMessage("plans.button.skipSet")),
+				skipExercise = new Button(LocaleHolder.readMessage("plans.button.skipExercise"));
 		mainPage.getChildren().addAll(exerciseName, set, save, skipSet, skipExercise);
 		skipExercise.setOnAction((event) -> {
 			LOG.trace("Skipping exercise");
@@ -403,9 +404,9 @@ public class PlansController {
 		LOG.trace("Loading window for handle workout");
 		HBox hb = new HBox(5);
 		Label name = new Label(workout.getWorkoutName());
-		Button start = new Button("Rozpocznij");
-		Button edit = new Button("Edytuj");
-		Button delete = new Button("Usuń");
+		Button start = new Button(LocaleHolder.readMessage("plans.button.start"));
+		Button edit = new Button(LocaleHolder.readMessage("plans.button.edit"));
+		Button delete = new Button(LocaleHolder.readMessage("plans.button.delete"));
 		hb.getChildren().addAll(name, start, edit, delete);
 		Label description = new Label(workout.getWorkoutDescription());
 		description.setMaxHeight(30);
@@ -454,7 +455,7 @@ public class PlansController {
 		mainPage.setSpacing(0);
 		ImageView plans = new ImageView("/images/plans.png");
 		mainPage.getChildren().add(plans);
-		Button addNewWorkout = new Button("Dodaj nowy plan");
+		Button addNewWorkout = new Button(LocaleHolder.readMessage("plans.button.addNewWorkout"));
 		mainPage.getChildren().add(addNewWorkout);
 		int i = 0;
 		for (Workout workout : workoutList) {
