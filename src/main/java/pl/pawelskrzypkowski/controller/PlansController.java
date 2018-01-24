@@ -411,10 +411,10 @@ public class PlansController {
 		Label description = new Label(workout.getWorkoutDescription());
 		description.setMaxHeight(30);
 		description.setMaxWidth(450);
-		Label type = new Label("Typ: " + workout.getWorkoutType());
+		Label type = new Label(LocaleHolder.readMessage("plans.label.type") + workout.getWorkoutType());
 		type.setMaxHeight(15);
 		type.setMaxWidth(450);
-		Label level = new Label("Poziom: " + workout.getDifficultyLevel());
+		Label level = new Label(LocaleHolder.readMessage("plans.label.level") + workout.getDifficultyLevel());
 		level.setMaxHeight(15);
 		level.setMaxWidth(450);
 		VBox vb = new VBox();
