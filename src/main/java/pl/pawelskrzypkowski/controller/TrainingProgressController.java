@@ -120,7 +120,7 @@ public class TrainingProgressController {
 			if(raised > max)
 				max = raised;
 		}
-		series.setName(LocaleHolder.readMessage(LocaleHolder.readMessage("trainingProgress.series.3")));
+		series.setName(LocaleHolder.readMessage("trainingProgress.series.3"));
 		chart.getData().add(series);
 		Label record = new Label(LocaleHolder.readMessage("trainingProgress.label.4") + max.toString());
 		mainPage.getChildren().addAll(chart, record);
@@ -215,7 +215,7 @@ public class TrainingProgressController {
 	public void createStage(VBox mainPage) {
 		LOG.trace("Loading main training progress window");
 		mainPage.getChildren().clear();
-		ImageView progress = new ImageView("/images/progress.png");
+		ImageView progress = new ImageView(LocaleHolder.readMessage("headers.progress"));
 		mainPage.getChildren().add(progress);
 		Button trainingsSummaries = new Button(LocaleHolder.readMessage("trainingProgress.button.trainingSummary")), showExercisesSummaries = new Button(LocaleHolder.readMessage("trainingProgress.button.exerciseSummary")), showMonthByMonthSummaries = new Button(LocaleHolder.readMessage("trainingProgress.button.monthSummary")),
 				showMeansurmentsSummaries = new Button(LocaleHolder.readMessage("trainingProgress.button.bodySummary"));

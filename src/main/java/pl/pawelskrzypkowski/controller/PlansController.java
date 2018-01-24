@@ -453,7 +453,7 @@ public class PlansController {
 		downloadPlans();
 		mainPage.getChildren().clear();
 		mainPage.setSpacing(0);
-		ImageView plans = new ImageView("/images/plans.png");
+		ImageView plans = new ImageView(LocaleHolder.readMessage("headers.plans"));
 		mainPage.getChildren().add(plans);
 		Button addNewWorkout = new Button(LocaleHolder.readMessage("plans.button.addNewWorkout"));
 		mainPage.getChildren().add(addNewWorkout);

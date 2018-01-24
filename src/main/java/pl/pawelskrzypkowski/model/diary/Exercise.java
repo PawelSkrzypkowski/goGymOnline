@@ -10,6 +10,7 @@ import org.hibernate.annotations.Type;
 import javax.persistence.*;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 /**
  * Klasa do obslugi cwiczen
@@ -77,4 +78,15 @@ public class Exercise implements Serializable {
 		entityManager.close();
 	}
 
+	@Override
+	public String toString() {
+		return "Exercise{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", description='" + description + '\'' +
+				", workingMuscles=" + Arrays.toString(workingMuscles) +
+				", record=" + record +
+				", recordReps=" + recordReps +
+				'}';
+	}
 }

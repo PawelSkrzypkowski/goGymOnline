@@ -300,7 +300,7 @@ public class CalculatorsController {
 	public void createStage(VBox mainPage) {
 		LOG.trace("Loading calculators window");
 		mainPage.getChildren().clear();
-		ImageView calc = new ImageView("/images/calculators.png");
+		ImageView calc = new ImageView(LocaleHolder.readMessage("headers.calculators"));
 		mainPage.getChildren().add(calc);
 		mainPage.setSpacing(10);
 		Button BMI = new Button(LocaleHolder.readMessage("calculators.bMI")), BMR = new Button(LocaleHolder.readMessage("calculators.bMR")),

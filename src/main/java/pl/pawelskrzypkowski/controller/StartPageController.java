@@ -164,7 +164,7 @@ public class StartPageController implements Initializable {
 	 * Metoda ladujaca strone glowna
 	 */
 	public void loadMain() {
-		ImageView home = new ImageView("/images/home.png");
+		ImageView home = new ImageView(LocaleHolder.readMessage("headers.home"));
 		mainPage.getChildren().add(home);
 		mainPage.setPadding(new Insets(10));
 		mainPage.setPrefWidth(500);

@@ -26,47 +26,47 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <Label text="Waga:">
+      <Label text="%logName.weight">
          <GridPane.margin>
             <Insets left="10.0" right="10.0" />
          </GridPane.margin>
       </Label>
-      <Label text="Szyja:" GridPane.rowIndex="2">
+      <Label text="%logName.neck" GridPane.rowIndex="2">
          <GridPane.margin>
             <Insets left="10.0" right="10.0" />
          </GridPane.margin>
       </Label>
-      <Label text="Klatka piersiowa:" GridPane.rowIndex="4">
+      <Label text="%logName.chest" GridPane.rowIndex="4">
          <GridPane.margin>
             <Insets left="10.0" right="10.0" />
          </GridPane.margin>
       </Label>
-      <Label text="Biceps:" GridPane.rowIndex="6">
+      <Label text="%logName.biceps" GridPane.rowIndex="6">
          <GridPane.margin>
             <Insets left="10.0" right="10.0" />
          </GridPane.margin>
       </Label>
-      <Label text="Talia:" GridPane.rowIndex="8">
+      <Label text="%logName.waist" GridPane.rowIndex="8">
          <GridPane.margin>
             <Insets left="10.0" right="10.0" />
          </GridPane.margin>
       </Label>
-      <Label text="Brzuch:" GridPane.columnIndex="1">
+      <Label text="%logName.stomach" GridPane.columnIndex="1">
          <GridPane.margin>
             <Insets left="10.0" right="10.0" />
          </GridPane.margin>
       </Label>
-      <Label text="Biodra:" GridPane.columnIndex="1" GridPane.rowIndex="2">
+      <Label text="%logName.hips" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <GridPane.margin>
             <Insets left="10.0" right="10.0" />
          </GridPane.margin>
       </Label>
-      <Label text="Udo:" GridPane.columnIndex="1" GridPane.rowIndex="4">
+      <Label text="%logName.thigh" GridPane.columnIndex="1" GridPane.rowIndex="4">
          <GridPane.margin>
             <Insets left="10.0" right="10.0" />
          </GridPane.margin>
       </Label>
-      <Label prefHeight="17.0" prefWidth="43.0" text="Łydka:" GridPane.columnIndex="1" GridPane.rowIndex="6">
+      <Label prefHeight="17.0" prefWidth="43.0" text="%logName.calf" GridPane.columnIndex="1" GridPane.rowIndex="6">
          <GridPane.margin>
             <Insets left="10.0" right="10.0" />
          </GridPane.margin>
@@ -116,7 +116,7 @@
             <Insets left="10.0" right="130.0" />
          </GridPane.margin>
       </TextField>
-      <Button fx:id="addLog" mnemonicParsing="false" text="Zatwierdź" GridPane.columnIndex="1" GridPane.rowIndex="9">
+      <Button fx:id="addLog" mnemonicParsing="false" text="%firstStart.button.createUser" GridPane.columnIndex="1" GridPane.rowIndex="9">
          <GridPane.margin>
             <Insets left="10.0" />
          </GridPane.margin>

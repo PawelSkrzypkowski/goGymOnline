@@ -18,7 +18,7 @@
                 <Image url="images/logo.png" />
             </image>
         </ImageView>
-        <Label prefHeight="38.0" prefWidth="400.0" text="Zaloguj się">
+        <Label prefHeight="38.0" prefWidth="400.0" text="%loginPage.logIn">
             <font>
                 <Font size="20.0" />
             </font>
@@ -26,7 +26,7 @@
                 <Insets left="10.0" right="10.0" />
             </VBox.margin>
         </Label>
-        <Label prefHeight="24.0" prefWidth="54.0" text="Login:">
+        <Label prefHeight="24.0" prefWidth="54.0" text="%loginPage.form.login">
             <font>
                 <Font size="14.0" />
             </font>
@@ -39,7 +39,7 @@
                 <Insets left="10.0" right="10.0" />
             </VBox.margin>
         </TextField>
-        <Label text="Hasło:">
+        <Label text="%loginPage.form.password">
             <font>
                 <Font size="14.0" />
             </font>
@@ -54,11 +54,11 @@
         </PasswordField>
       <HBox prefHeight="36.0" prefWidth="390.0" spacing="170.0">
          <children>
-            <Button fx:id="log" mnemonicParsing="false" text="Zaloguj się">
+            <Button fx:id="log" mnemonicParsing="false" text="%loginPage.logIn">
                <HBox.margin>
                   <Insets />
                </HBox.margin></Button>
-            <Button fx:id="register" mnemonicParsing="false" text="Zarejestruj się" textAlignment="JUSTIFY" />
+            <Button fx:id="register" mnemonicParsing="false" text="%loginPage.register" textAlignment="JUSTIFY" />
          </children>
          <opaqueInsets>
             <Insets />
@@ -67,7 +67,7 @@
             <Insets left="10.0" top="10.0" />
          </VBox.margin>
       </HBox>
-      <Label fx:id="error" style="-fx-font-weight: bold;" text="Niepoprawne hasło lub login. Spróbuj ponownie!" textFill="#ae0000" visible="false">
+      <Label fx:id="error" style="-fx-font-weight: bold;" text="%loginPage.error" textFill="#ae0000" visible="false">
          <VBox.margin>
             <Insets left="10.0" />
          </VBox.margin>

@@ -19,10 +19,10 @@ public class Logs {
 	static final Logger LOG = LoggerFactory.getLogger(Main.class);
 	public void createStage(VBox mainPage) throws IOException {
 		LOG.trace("Opening logs window");
-		GridPane root =(GridPane) FXMLLoader.load(getClass().getResource("/LogFxml.fxml"));
+		GridPane root =(GridPane) FXMLLoader.load(getClass().getResource("/LogFxml.fxml"), LocaleHolder.getDefaultInstance());
 		mainPage.getChildren().clear();
 		mainPage.setSpacing(0);
-		ImageView logs = new ImageView("/images/logs.png");
+		ImageView logs = new ImageView(LocaleHolder.readMessage("headers.logs"));
 		mainPage.getChildren().add(logs);
 		mainPage.getChildren().add(root);
 		LOG.trace("Logs window opened");

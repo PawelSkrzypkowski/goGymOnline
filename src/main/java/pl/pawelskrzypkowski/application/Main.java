@@ -30,7 +30,7 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		LOG.trace("Application start");
 		try {
-			VBox root = FXMLLoader.load(getClass().getResource("/LoginPage.fxml"));
+			VBox root = FXMLLoader.load(getClass().getResource("/LoginPage.fxml"), LocaleHolder.getDefaultInstance());
 			Scene scene = new Scene(root, 400, 340);
 			scene.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
 			primaryStage.setScene(scene);
@@ -41,6 +41,7 @@ public class Main extends Application {
 			primaryStage.show();
 			stage = primaryStage;
 			LOG.trace("Login page loaded");
+			JPAHolder.getEntityManager();
 		} catch (Exception e) {
 			e.printStackTrace();
 			Alert alert = new Alert(AlertType.INFORMATION);

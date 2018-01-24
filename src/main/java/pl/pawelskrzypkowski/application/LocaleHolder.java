@@ -23,10 +23,6 @@ public class LocaleHolder {
         return getDefaultInstance();
     }
     public static String readMessage(String key){
-        try {
-            return new String(getDefaultInstance().getString(key).getBytes("ISO-8859-1"), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            return null;
-        }
+            return getDefaultInstance().getString(key);
     }
 }
