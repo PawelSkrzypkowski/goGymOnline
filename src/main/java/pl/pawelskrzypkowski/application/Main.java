@@ -28,7 +28,6 @@ public class Main extends Application {
 	 */
 	@Override
 	public void start(Stage primaryStage) {
-		LocaleHolder.changeDeafultInstance(Locale.US);
 		LOG.trace("Application start");
 		try {
 			VBox root = FXMLLoader.load(getClass().getResource("/LoginPage.fxml"), LocaleHolder.getDefaultInstance());

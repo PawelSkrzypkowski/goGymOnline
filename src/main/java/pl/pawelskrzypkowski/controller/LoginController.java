@@ -1,5 +1,8 @@
 package pl.pawelskrzypkowski.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.pawelskrzypkowski.application.FirstStart;
@@ -10,10 +13,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -23,16 +22,19 @@ import pl.pawelskrzypkowski.model.user.User;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
     static final Logger LOG = LoggerFactory.getLogger(Main.class);
+    static final ObservableList languageList = FXCollections.observableArrayList("Polski", "English");
     @FXML
     TextField login;
     @FXML
@@ -41,6 +43,8 @@ public class LoginController implements Initializable {
     Button log, register;
     @FXML
     Label error;
+    @FXML
+    ComboBox<String> language;
 
     public void tryLogIn() throws NoSuchAlgorithmException, IOException {
         LOG.trace("Logging in...");
@@ -81,6 +85,20 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL arg0, ResourceBundle arg1){
+        language.setItems(languageList);
+        if(LocaleHolder.getDefaultInstance().getLocale().equals(Locale.US))
+            language.getSelectionModel().selectLast();
+        else
+            language.getSelectionModel().selectFirst();
+        language.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue.equals(languageList.get(0))){
+                LocaleHolder.changeDeafultInstance(Locale.getDefault());
+                new Main().start(Main.stage);
+            } else {
+                LocaleHolder.changeDeafultInstance(Locale.US);
+                new Main().start(Main.stage);
+            }
+        });
         log.setOnMouseClicked(event->{
             try {
                 tryLogIn();
