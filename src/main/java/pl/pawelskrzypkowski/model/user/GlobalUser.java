@@ -6,4 +6,5 @@ package pl.pawelskrzypkowski.model.user;
  */
 public class GlobalUser {
     public static long loggedUserId;
+    public static String skin = "/application.css";
 }

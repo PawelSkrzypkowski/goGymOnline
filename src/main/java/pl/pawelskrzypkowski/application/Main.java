@@ -12,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.pawelskrzypkowski.model.user.GlobalUser;
 
 import java.util.Locale;
 
@@ -32,7 +33,7 @@ public class Main extends Application {
 		try {
 			VBox root = FXMLLoader.load(getClass().getResource("/LoginPage.fxml"), LocaleHolder.getDefaultInstance());
 			Scene scene = new Scene(root, 400, 340);
-			scene.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
+			scene.getStylesheets().add(getClass().getResource(GlobalUser.skin).toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.setResizable(false);
 			primaryStage.setTitle(LocaleHolder.getDefaultInstance().getString("loginPage.title"));

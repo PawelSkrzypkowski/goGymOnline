@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.pawelskrzypkowski.model.user.GlobalUser;
 
 /**
  * Klasa tworząca scene do pierwszego włączenia aplikacji
@@ -28,7 +29,7 @@ public class FirstStart {
 			ResourceBundle resourceBundle = LocaleHolder.getDefaultInstance();
 			VBox root = FXMLLoader.load(getClass().getResource("/FirstStart.fxml"), resourceBundle);
 			Scene scene = new Scene(root,400,760);
-			scene.getStylesheets().add(getClass().getResource("/application.css").toExternalForm());
+			scene.getStylesheets().add(getClass().getResource(GlobalUser.skin).toExternalForm());
 			secondaryStage.setScene(scene);
 			secondaryStage.setResizable(false);
 			secondaryStage.setTitle(LocaleHolder.getDefaultInstance().getString("firstStart.title"));
