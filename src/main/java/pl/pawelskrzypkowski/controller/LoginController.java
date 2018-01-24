@@ -112,10 +112,13 @@ public class LoginController implements Initializable {
             LOG.trace("Changing skin");
             if(newValue.equals(skinList.get(0))){
                 GlobalUser.skin = "/application.css";
+                GlobalUser.color = "#2e3539";
             } else if(newValue.equals(skinList.get(1))){
                 GlobalUser.skin = "/application2.css";
+                GlobalUser.color = "#EDEDED";
             } else if(newValue.equals(skinList.get(2))){
                 GlobalUser.skin = "/application3.css";
+                GlobalUser.color = "#F0F0F0";
             }
             new Main().start(Main.stage);
             LOG.trace("Skin changed");

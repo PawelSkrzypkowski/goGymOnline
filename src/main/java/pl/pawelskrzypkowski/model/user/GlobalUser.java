@@ -7,4 +7,5 @@ package pl.pawelskrzypkowski.model.user;
 public class GlobalUser {
     public static long loggedUserId;
     public static String skin = "/application.css";
+    public static String color = "#2e3539";
 }

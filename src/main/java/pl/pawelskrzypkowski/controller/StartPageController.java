@@ -33,6 +33,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import pl.pawelskrzypkowski.model.user.GlobalUser;
 import pl.pawelskrzypkowski.model.user.User;
 import pl.pawelskrzypkowski.model.user.utility.UserUtility;
 import org.hibernate.engine.jdbc.BlobProxy;
@@ -164,17 +165,17 @@ public class StartPageController implements Initializable {
 	 * Metoda ladujaca strone glowna
 	 */
 	public void loadMain() {
-		ImageView home = new ImageView(LocaleHolder.readMessage("headers.home"));
+		ImageView home = new ImageView( );
 		mainPage.getChildren().add(home);
 		mainPage.setPadding(new Insets(10));
 		mainPage.setPrefWidth(500);
-		mainPage.setStyle("-fx-background-color:  #2e3539");
+		mainPage.setStyle("-fx-background-color: " + GlobalUser.color);
 		mainPage.setSpacing(0);
 		ScrollPane sp = new ScrollPane(mainPage);
 		sp.setFitToHeight(true);
 		sp.setHbarPolicy(ScrollBarPolicy.NEVER);
 		sp.setFitToWidth(true);
-		sp.setStyle("-fx-background-color:  #2e3539");
+		sp.setStyle("-fx-background-color: " +  GlobalUser.color);
 		page.getChildren().add(sp);
 		Text text = new Text(LocaleHolder.readMessage("startPage.hello.1") + "\n"
 				+ LocaleHolder.readMessage("startPage.hello.2") + "\n\n" + LocaleHolder.readMessage("startPage.hello.3"));

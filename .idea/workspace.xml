@@ -2,18 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c06e40cf-4cf8-4ae5-97ff-6981d49fa5e2" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/application2.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/resources/application3.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/application/FirstStart.java" afterPath="$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/application/FirstStart.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/application/Main.java" afterPath="$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/application/Main.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/controller/LoginController.java" afterPath="$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/controller/LoginController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/controller/StartPageController.java" afterPath="$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/controller/StartPageController.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/model/user/GlobalUser.java" afterPath="$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/model/user/GlobalUser.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/LoginPage.fxml" afterPath="$PROJECT_DIR$/src/main/resources/LoginPage.fxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/application.css" afterPath="$PROJECT_DIR$/src/main/resources/application.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/messages.properties" afterPath="$PROJECT_DIR$/src/main/resources/messages.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/resources/messages_en_US.properties" afterPath="$PROJECT_DIR$/src/main/resources/messages_en_US.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/application.css" afterPath="$PROJECT_DIR$/target/classes/application.css" />
     </list>
     <ignored path="$PROJECT_DIR$/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -30,41 +21,31 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="FirstStart.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/application/FirstStart.java">
+      <file leaf-file-name="StartPageController.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/controller/StartPageController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="191">
-              <caret line="31" column="77" lean-forward="false" selection-start-line="31" selection-start-column="77" selection-end-line="31" selection-end-column="77" />
+            <state relative-caret-position="429">
+              <caret line="177" column="66" lean-forward="true" selection-start-line="177" selection-start-column="66" selection-end-line="177" selection-end-column="66" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Logs.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/application/Logs.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="24" column="77" lean-forward="false" selection-start-line="24" selection-start-column="77" selection-end-line="24" selection-end-column="77" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/application/Main.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="39" column="0" lean-forward="true" selection-start-line="39" selection-start-column="0" selection-end-line="39" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LoginController.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="LoginController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/controller/LoginController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
-              <caret line="64" column="77" lean-forward="false" selection-start-line="64" selection-start-column="77" selection-end-line="64" selection-end-column="77" />
+            <state relative-caret-position="449">
+              <caret line="127" column="27" lean-forward="true" selection-start-line="120" selection-start-column="45" selection-end-line="127" selection-end-column="27" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GlobalUser.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/model/user/GlobalUser.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="153">
+              <caret line="9" column="34" lean-forward="false" selection-start-line="9" selection-start-column="34" selection-end-line="9" selection-end-column="41" />
               <folding />
             </state>
           </provider>
@@ -136,7 +117,6 @@
         <option value="$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/model/diary/Exercise.java" />
         <option value="$PROJECT_DIR$/src/main/resources/LogFxml.fxml" />
         <option value="$PROJECT_DIR$/src/main/resources/StartPage.fxml" />
-        <option value="$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/controller/StartPageController.java" />
         <option value="$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/controller/CalculatorsController.java" />
         <option value="$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/controller/LogsController.java" />
         <option value="$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/application/Logs.java" />
@@ -146,11 +126,12 @@
         <option value="$PROJECT_DIR$/src/main/resources/application3.css" />
         <option value="$PROJECT_DIR$/src/main/resources/application.css" />
         <option value="$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/application/Main.java" />
-        <option value="$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/model/user/GlobalUser.java" />
         <option value="$PROJECT_DIR$/src/main/resources/messages_en_US.properties" />
         <option value="$PROJECT_DIR$/src/main/resources/messages.properties" />
         <option value="$PROJECT_DIR$/src/main/resources/LoginPage.fxml" />
         <option value="$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/application/FirstStart.java" />
+        <option value="$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/model/user/GlobalUser.java" />
+        <option value="$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/controller/StartPageController.java" />
         <option value="$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/controller/LoginController.java" />
       </list>
     </option>
@@ -1002,16 +983,15 @@
       <workItem from="1516728884930" duration="1441000" />
       <workItem from="1516746464136" duration="896000" />
       <workItem from="1516788540817" duration="5831000" />
-      <workItem from="1516805617535" duration="7914000" />
+      <workItem from="1516805617535" duration="8668000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="54954000" />
+    <option name="totallyTimeSpent" value="55708000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1456" height="876" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1035,7 +1015,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="HDInsight Spark Submission" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32898173" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32898173" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Persistence" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="true" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24861111" sideWeight="0.5" order="7" side_tool="false" content_ui="combo" />
@@ -1287,17 +1267,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/resources/StartPage.fxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1190">
-          <caret line="5" column="27" lean-forward="false" selection-start-line="5" selection-start-column="22" selection-end-line="5" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="JavaFX-Scene-Builder">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/controller/CalculatorsController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="185">
@@ -1310,14 +1279,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="769">
           <caret line="74" column="28" lean-forward="false" selection-start-line="74" selection-start-column="28" selection-end-line="74" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/controller/StartPageController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="166" column="39" lean-forward="false" selection-start-line="166" selection-start-column="39" selection-end-line="166" selection-end-column="79" />
           <folding />
         </state>
       </provider>
@@ -1408,14 +1369,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/model/user/GlobalUser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="50" lean-forward="false" selection-start-line="8" selection-start-column="50" selection-end-line="8" selection-end-column="50" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/resources/messages_en_US.properties">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -1477,10 +1430,37 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/resources/StartPage.fxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="301">
+          <caret line="95" column="7" lean-forward="true" selection-start-line="95" selection-start-column="7" selection-end-line="95" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="JavaFX-Scene-Builder">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/model/user/GlobalUser.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="34" lean-forward="false" selection-start-line="9" selection-start-column="34" selection-end-line="9" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/controller/LoginController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="64" column="77" lean-forward="false" selection-start-line="64" selection-start-column="77" selection-end-line="64" selection-end-column="77" />
+        <state relative-caret-position="449">
+          <caret line="127" column="27" lean-forward="true" selection-start-line="120" selection-start-column="45" selection-end-line="127" selection-end-column="27" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/pl/pawelskrzypkowski/controller/StartPageController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="429">
+          <caret line="177" column="66" lean-forward="true" selection-start-line="177" selection-start-column="66" selection-end-line="177" selection-end-column="66" />
           <folding />
         </state>
       </provider>
