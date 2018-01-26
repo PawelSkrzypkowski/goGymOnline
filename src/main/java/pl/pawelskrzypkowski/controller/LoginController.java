@@ -3,6 +3,7 @@ package pl.pawelskrzypkowski.controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
+import javafx.scene.paint.Color;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.pawelskrzypkowski.application.FirstStart;
@@ -113,12 +114,15 @@ public class LoginController implements Initializable {
             if(newValue.equals(skinList.get(0))){
                 GlobalUser.skin = "/application.css";
                 GlobalUser.color = "#2e3539";
+                GlobalUser.fontColor = Color.WHITE;
             } else if(newValue.equals(skinList.get(1))){
                 GlobalUser.skin = "/application2.css";
                 GlobalUser.color = "#EDEDED";
+                GlobalUser.fontColor = Color.BLACK;
             } else if(newValue.equals(skinList.get(2))){
                 GlobalUser.skin = "/application3.css";
                 GlobalUser.color = "#F0F0F0";
+                GlobalUser.fontColor = Color.BLACK;
             }
             new Main().start(Main.stage);
             LOG.trace("Skin changed");

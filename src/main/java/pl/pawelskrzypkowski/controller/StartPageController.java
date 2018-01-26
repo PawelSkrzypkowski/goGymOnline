@@ -180,7 +180,7 @@ public class StartPageController implements Initializable {
 		Text text = new Text(LocaleHolder.readMessage("startPage.hello.1") + "\n"
 				+ LocaleHolder.readMessage("startPage.hello.2") + "\n\n" + LocaleHolder.readMessage("startPage.hello.3"));
 		text.setWrappingWidth(450);
-		text.setFill(Color.WHITE);
+		text.setFill(GlobalUser.fontColor);
 		mainPage.getChildren().add(text);
 		loadAvatar();
 	}

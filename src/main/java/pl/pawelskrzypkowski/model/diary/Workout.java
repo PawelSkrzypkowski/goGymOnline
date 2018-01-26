@@ -104,7 +104,6 @@ public class Workout implements Serializable {
 		if(!getDifficultyLevel().equals(level))
 			setDifficultyLevel(level);
 		if(!getWorkoutName().equals(name)){
-			deleteWorkout();
 			setWorkoutName(name);
 		}
 		saveWorkout();

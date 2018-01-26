@@ -18,11 +18,13 @@ public class PlansControllerUtility {
     public static boolean checkStringCorrectness(String name) {
         Pattern pattern = Pattern.compile("[^A-Za-z0-9żźćńółęąśŻŹĆĄŚĘŁÓŃs\\s\\-,]");
         Matcher matcher = pattern.matcher(name);
-        if (matcher.find() == true || name.length() == 0)// jesli zostal
+        if (matcher.find()) {// jesli zostal
             // odnaleziony znak
             // spoza
             // zakresu a-z i A-Z -, czyli niepoprawny lub pusty
+            System.out.println(name);
             return false;
+        }
         return true;
     }
 }
