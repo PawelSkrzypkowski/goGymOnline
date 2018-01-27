@@ -2,6 +2,7 @@ package pl.pawelskrzypkowski.controller;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -10,6 +11,9 @@ import java.util.ResourceBundle;
 import javax.imageio.ImageIO;
 
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.pawelskrzypkowski.application.LocaleHolder;
@@ -50,7 +54,7 @@ public class StartPageController implements Initializable {
 	@FXML
 	private ImageView refreshUserData, editAvatar, avatar;
 	@FXML
-	private Label userData;
+	private Label userData, weather;
 	private VBox mainPage = new VBox();
 	@FXML
 	private HBox page;
@@ -161,6 +165,14 @@ public class StartPageController implements Initializable {
 		avatar.setX(margin);
 		LOG.trace("Avatar loaded");
 	}
+	public void loadWeather() throws IOException {
+		String requestURL = "http://api.wunderground.com/api/7533263ef31f677a/conditions/q/poland/Warsaw.json";
+		URL wikiRequest = new URL(requestURL);
+		JSONTokener tokener = new JSONTokener(wikiRequest.openStream());
+		JSONObject root = new JSONObject(tokener);
+		JSONObject observation = root.getJSONObject("current_observation");
+		weather.setText(LocaleHolder.readMessage("startPage.weather") + observation.get("temp_c") + "\u00b0" + "C");
+	}
 	/**
 	 * Metoda ladujaca strone glowna
 	 */
@@ -183,5 +195,10 @@ public class StartPageController implements Initializable {
 		text.setFill(GlobalUser.fontColor);
 		mainPage.getChildren().add(text);
 		loadAvatar();
+		try {
+			loadWeather();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
