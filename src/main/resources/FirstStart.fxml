@@ -15,14 +15,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="vb" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FirstStartController">
+<VBox  fx:id="vb" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.pawelskrzypkowski.controller.FirstStartController">
    <children>
       <ImageView fitHeight="107.0" fitWidth="400.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="images/logo.png" />
          </image>
       </ImageView>
-      <Label prefHeight="38.0" prefWidth="400.0" text="Załóż konto w aplikacji goGym">
+      <Label prefHeight="38.0" prefWidth="400.0" text="%firstStart.titleLabel">
          <font>
             <Font size="20.0" />
          </font>
@@ -30,7 +30,7 @@
             <Insets left="10.0" right="10.0" />
          </VBox.margin>
       </Label>
-      <Label prefHeight="21.0" prefWidth="76.0" text="Login*:">
+      <Label prefHeight="21.0" prefWidth="76.0" text="%firstStart.login">
          <VBox.margin>
             <Insets left="10.0" right="10.0" />
          </VBox.margin>
@@ -40,7 +40,7 @@
             <Insets left="10.0" right="10.0" />
          </VBox.margin>
       </TextField>
-      <Label text="Hasło*:">
+      <Label text="%firstStart.password">
          <VBox.margin>
             <Insets left="10.0" right="10.0" />
          </VBox.margin>
@@ -50,7 +50,7 @@
             <Insets left="10.0" right="10.0" />
          </VBox.margin>
       </PasswordField>
-      <Label prefHeight="24.0" prefWidth="54.0" text="Imię*:">
+      <Label prefHeight="24.0" prefWidth="54.0" text="%firstStart.name">
          <font>
             <Font size="14.0" />
          </font>
@@ -58,12 +58,12 @@
             <Insets left="10.0" right="10.0" />
          </VBox.margin>
       </Label>
-      <TextField fx:id="setFirstName" prefHeight="25.0" prefWidth="316.0" promptText="Jan">
+      <TextField fx:id="setFirstName" prefHeight="25.0" prefWidth="316.0" promptText="%firstStart.namePrompt">
          <VBox.margin>
             <Insets left="10.0" right="10.0" />
          </VBox.margin>
       </TextField>
-      <Label text="Nazwisko*:">
+      <Label text="%firstStart.surname">
          <font>
             <Font size="14.0" />
          </font>
@@ -71,12 +71,12 @@
             <Insets left="10.0" right="10.0" />
          </VBox.margin>
       </Label>
-      <TextField fx:id="setLastName" promptText="Kowalski">
+      <TextField fx:id="setLastName" promptText="%firstStart.surnamePrompt">
          <VBox.margin>
             <Insets left="10.0" right="10.0" />
          </VBox.margin>
       </TextField>
-      <Label text="Data urodzenia*:">
+      <Label text="%firstStart.birthDate">
          <font>
             <Font size="14.0" />
          </font>
@@ -86,15 +86,15 @@
       </Label>
       <HBox prefHeight="46.0" prefWidth="380.0">
          <children>
-            <ComboBox fx:id="birthDay" prefHeight="25.0" prefWidth="80.0" promptText="dzień" />
-            <ComboBox fx:id="birthMonth" prefHeight="25.0" prefWidth="131.0" promptText="miesiąc" />
-            <ComboBox fx:id="birthYear" prefHeight="25.0" prefWidth="100.0" promptText="rok" />
+            <ComboBox fx:id="birthDay" prefHeight="25.0" prefWidth="80.0" promptText="%firstStart.day" />
+            <ComboBox fx:id="birthMonth" prefHeight="25.0" prefWidth="131.0" promptText="%firstStart.month" />
+            <ComboBox fx:id="birthYear" prefHeight="25.0" prefWidth="100.0" promptText="%firstStart.year" />
          </children>
          <VBox.margin>
             <Insets left="10.0" right="10.0" />
          </VBox.margin>
       </HBox>
-      <Label prefHeight="20.0" prefWidth="115.0" text="Pomiary ciała:">
+      <Label prefHeight="20.0" prefWidth="115.0" text="%firstStart.bodyLog">
          <font>
             <Font size="14.0" />
          </font>
@@ -120,47 +120,47 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Waga:">
+            <Label text="%firstStart.weight">
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
             </Label>
-            <Label text="Szyja:" GridPane.rowIndex="2">
+            <Label text="%firstStart.neck" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
             </Label>
-            <Label text="Klatka piersiowa:" GridPane.rowIndex="4">
+            <Label text="%firstStart.chest" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
             </Label>
-            <Label text="Biceps:" GridPane.rowIndex="6">
+            <Label text="%firstStart.biceps" GridPane.rowIndex="6">
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
             </Label>
-            <Label text="Talia:" GridPane.rowIndex="8">
+            <Label text="%firstStart.waist" GridPane.rowIndex="8">
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
             </Label>
-            <Label text="Brzuch:" GridPane.columnIndex="1">
+            <Label text="%firstStart.stomach" GridPane.columnIndex="1">
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
             </Label>
-            <Label text="Biodra:" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <Label text="%firstStart.hips" GridPane.columnIndex="1" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
             </Label>
-            <Label text="Udo:" GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <Label text="%firstStart.thigh" GridPane.columnIndex="1" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
             </Label>
-            <Label prefHeight="17.0" prefWidth="43.0" text="Łydka:" GridPane.columnIndex="1" GridPane.rowIndex="6">
+            <Label prefHeight="17.0" prefWidth="43.0" text="%firstStart.calf" GridPane.columnIndex="1" GridPane.rowIndex="6">
                <GridPane.margin>
                   <Insets left="10.0" right="10.0" />
                </GridPane.margin>
@@ -210,7 +210,7 @@
                   <Insets left="10.0" right="130.0" />
                </GridPane.margin>
             </TextField>
-            <Button fx:id="createUser" mnemonicParsing="false" prefHeight="31.0" prefWidth="97.0" text="Zatwierdź" GridPane.columnIndex="1" GridPane.rowIndex="9">
+            <Button fx:id="createUser" mnemonicParsing="false" prefHeight="31.0" prefWidth="97.0" text="%firstStart.button.createUser" GridPane.columnIndex="1" GridPane.rowIndex="9">
                <GridPane.margin>
                   <Insets left="120.0" />
                </GridPane.margin>
